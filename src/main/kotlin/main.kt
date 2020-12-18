@@ -37,13 +37,18 @@ class TransactionRepository(val loader: TransactionLoader) {
         merchant: String,
         fromDate: LocalDateTime,
         toDate: LocalDateTime
-    ): List<Transaction> =
-        data.filter {
+    ): List<Transaction> {
+        val reversal = data.filter { it.type == TransactionType.REVERSAL }
+            .map { it.relatedTransactionId }
+        return data.filter {
             it.merchantName == merchant
                     && it.transactedAt.isAfter(fromDate)
                     && it.transactedAt.isBefore(toDate)
                     && it.type != TransactionType.REVERSAL
+                    && !reversal.contains(it.id)
         }
+    }
+
 }
 
 class TransactionLoader(val input: InputStream) {
