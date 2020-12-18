@@ -2,12 +2,13 @@ import java.io.BufferedReader
 import java.io.InputStream
 import java.io.InputStreamReader
 import java.math.BigDecimal
+import java.math.MathContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import java.util.stream.Collectors
 
 fun main(args: Array<String>) {
-    println("fromDate (dd/MM/yyyy HH:mm:ss)")
+    println("fromDate (dd/MM/yyyy HH:mm:ss):")
     val fromDate = readLine()
     println("toDate (dd/MM/yyyy HH:mm:ss):")
     val toDate = readLine()
@@ -23,8 +24,8 @@ fun main(args: Array<String>) {
 
     if (result.isNotEmpty()) {
         println("Number of transactions = ${result.size}")
-        val sum = result.sumOf { it.amount }
-        println("Average Transaction Value = $sum")
+        val sum = result.sumOf { it.amount }/result.size.toBigDecimal()
+        println("Average Transaction Value = ${sum.round(MathContext(2))}")
     } else {
         println("No transactions found.")
     }
