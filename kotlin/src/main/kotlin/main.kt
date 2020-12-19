@@ -3,6 +3,7 @@ import java.io.InputStream
 import java.io.InputStreamReader
 import java.math.BigDecimal
 import java.math.MathContext
+import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 import kotlin.streams.toList
@@ -24,8 +25,10 @@ fun main(args: Array<String>) {
 
     if (result.isNotEmpty()) {
         println("Number of transactions = ${result.size}")
-        val sum = result.sumOf { it.amount } / result.size.toBigDecimal()
-        println("Average Transaction Value = ${sum.round(MathContext(2))}")
+        val sum = result.sumOf { it.amount }
+        val avg  = sum / result.size.toBigDecimal()
+        val formattdAvg = DecimalFormat("#0.##").format(avg)
+        println("Average Transaction Value = $formattdAvg")
     } else {
         println("No transactions found.")
     }

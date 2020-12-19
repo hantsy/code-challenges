@@ -40,8 +40,8 @@ public class Main {
                     Average Transaction Value = %.2f
                     """;
             var sum = result.stream()
-                    .map(it -> it.amount())
-                    .reduce(BigDecimal.ZERO, (item, transaction) -> item.add(transaction));
+                    .map(Transaction::amount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
             var avg = sum.divide(new BigDecimal(result.size()));
             System.out.println(printTemplate.formatted(result.size(), avg));
         }
