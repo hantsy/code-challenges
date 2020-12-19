@@ -5,7 +5,7 @@ import java.math.BigDecimal
 import java.math.MathContext
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.stream.Collectors
+import kotlin.streams.toList
 
 fun main(args: Array<String>) {
     println("fromDate (dd/MM/yyyy HH:mm:ss):")
@@ -24,7 +24,7 @@ fun main(args: Array<String>) {
 
     if (result.isNotEmpty()) {
         println("Number of transactions = ${result.size}")
-        val sum = result.sumOf { it.amount }/result.size.toBigDecimal()
+        val sum = result.sumOf { it.amount } / result.size.toBigDecimal()
         println("Average Transaction Value = ${sum.round(MathContext(2))}")
     } else {
         println("No transactions found.")
@@ -55,8 +55,7 @@ class TransactionRepository(val loader: TransactionLoader) {
 class TransactionLoader(val input: InputStream) {
     fun load(): List<Transaction> {
         val reader = BufferedReader(InputStreamReader(input))
-        val lines = reader.lines().collect(Collectors.toList())
-        return lines.subList(1, lines.size).map { buildTransaction(it) }
+        return reader.lines().skip(1).map { buildTransaction(it) }.toList()
     }
 
     private fun buildTransaction(line: String): Transaction {
