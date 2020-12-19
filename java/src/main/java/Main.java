@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
@@ -79,6 +80,14 @@ record TransactionStatisticsRequest(
         LocalDateTime toDate,
         String merchantName
 ) {
+    public TransactionStatisticsRequest {
+        Objects.requireNonNull(merchantName, "merchant name can not be null");
+        Objects.requireNonNull(fromDate, "fromDate can not be null");
+        Objects.requireNonNull(toDate, "toDate can not be null");
+        if (toDate.isBefore(fromDate)) {
+            throw new IllegalArgumentException("fromDate should before toDate");
+        }
+    }
 }
 
 sealed class TransactionStatisticsResponse
@@ -129,17 +138,18 @@ class TransactionStatisticsService implements TransactionStatisticsReportHandler
     }
 
     public TransactionStatisticsResponse handleReportRequest(TransactionStatisticsRequest request) {
-        var resersvalIds = this.store.findByType(TransactionType.REVERSAL)
+        var relatedTransactionsIds = this.store.findByType(TransactionType.REVERSAL)
                 .stream().map(t -> t.relatedTransactionId()).collect(Collectors.toList());
 
-        var transactions = this.store.findByMerchantAndDateRange(
+        var transactions = this.store.findByMerchantAndDateRangeAndType(
                 request.merchantName(),
                 request.fromDate(),
-                request.toDate()
+                request.toDate(),
+                TransactionType.PAYMENT
         );
 
         var filtered = transactions.stream()
-                .filter(t -> !resersvalIds.contains(t.id()))
+                .filter(t -> !relatedTransactionsIds.contains(t.id()))
                 .collect(Collectors.toList());
 
         if (filtered.isEmpty()) {
@@ -196,17 +206,17 @@ class TransactionStore implements TransactionLoader, TransactionPersister, Trans
     @Override
     public List<Transaction> findByType(TransactionType type) {
         return data.stream()
-                .filter(it -> it.type() == TransactionType.REVERSAL)
+                .filter(it -> it.type() == type)
                 .collect(Collectors.toList());
     }
 
     @Override
-    public List<Transaction> findByMerchantAndDateRange(String merchant, LocalDateTime fromDate, LocalDateTime toDate) {
+    public List<Transaction> findByMerchantAndDateRangeAndType(String merchant, LocalDateTime fromDate, LocalDateTime toDate, TransactionType type) {
         return data.stream()
                 .filter(it -> it.merchantName().equals(merchant)
                         && it.transactedAt().isAfter(fromDate)
                         && it.transactedAt().isBefore(toDate)
-                        && it.type() != TransactionType.REVERSAL
+                        && it.type() == type
                 )
                 .collect(Collectors.toList());
     }
@@ -224,7 +234,7 @@ interface TransactionPersister {
 interface TransactionRepository {
     List<Transaction> findByType(TransactionType type);
 
-    List<Transaction> findByMerchantAndDateRange(String merchant, LocalDateTime fromDate, LocalDateTime toDate);
+    List<Transaction> findByMerchantAndDateRangeAndType(String merchant, LocalDateTime fromDate, LocalDateTime toDate, TransactionType type);
 }
 
 //AKNBVHMN, 20/08/2020 13:14:11, 10.95, Kwik-E-Mart, REVERSAL, YGXKOEIA
