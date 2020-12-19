@@ -1,4 +1,5 @@
 import java.io.BufferedReader;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
@@ -52,7 +53,11 @@ class TransactionRepository {
     private List<Transaction> data;
 
     TransactionRepository(TransactionLoader _loader) {
-        this.data = _loader.load();
+        try {
+            this.data = _loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public List<Transaction> queryByMerchantAndDateRange(
@@ -83,9 +88,10 @@ class TransactionLoader {
         this.source = source;
     }
 
-    public List<Transaction> load() {
-        var reader = new BufferedReader(new InputStreamReader(this.source));
-        return reader.lines().skip(1).map(this::buildTransaction).collect(Collectors.toList());
+    public List<Transaction> load() throws IOException {
+        try (var reader = new BufferedReader(new InputStreamReader(this.source))) {
+            return reader.lines().skip(1).map(this::buildTransaction).collect(Collectors.toList());
+        }
     }
 
     private Transaction buildTransaction(String line) {
