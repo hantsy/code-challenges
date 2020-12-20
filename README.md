@@ -1,6 +1,6 @@
 # A Simple Transaction Analyzer
 
-A Simple Transaction Analyzer which is use for loading transaction records from CSV files and generating statistics reporting after analyzing the loaded data.
+A Simple Transaction Analyzer which is use for loading transaction records from CSV files and generating statistics report after analyzing the loaded data.
 
 It is implemented in different languages and technologies.
 
