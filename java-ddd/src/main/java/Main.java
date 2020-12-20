@@ -22,33 +22,30 @@ public class Main {
         System.out.println("merchant:");
         var merchant = scanner.nextLine();
 
-        //loading file
+        // loading file
         var input = Main.class.getResourceAsStream("input.csv");
 
-        //declare the loader.
+        // declare a TransactionLoader.
         var store = new TransactionStore(input);
 
-        //loading data
+        // loading data from input stream
         var loadedTransactions = store.load();
 
-        //persisting the loaded data.
-        //
-        //It could be a different handler, eg.
-        //TransactionPersister persister = new TransactionStore()
-        // persiter.persist()
+        // persisting the loaded data.
+        // it could be a different handler in the real world application, eg.
+        // TransactionPersister persister = new ...()
+        // persister.persist()
         store.persist(loadedTransactions);
 
-        // declare a TransactionStatisticsReportHandler
-        // assemble the dependencies
+        // declare a TransactionStatisticsReportHandler and assemble the dependencies
         // The `store` could be the `TransactionRepository` for queries in a real world application.
-        //
         TransactionStatisticsReportHandler service = new TransactionStatisticsService(store);
 
-        // now instantiating a client
+        // now try to instantiate a client
         // set the report handler instance
         var client = new TransactionStatisticsReportRequestor(service);
 
-        // send request and get the report now.
+        // gather the input data and send a request and get the report result now.
         var report = client.sendRequest(
                 merchant,
                 LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
@@ -131,15 +128,15 @@ interface TransactionStatisticsReportHandler {
 class TransactionStatisticsService implements TransactionStatisticsReportHandler {
 
     //in a real world application, it could be injected by different interfaces.
-    private final TransactionStore store;
+    private final TransactionRepository store;
 
-    TransactionStatisticsService(TransactionStore store) {
+    TransactionStatisticsService(TransactionRepository store) {
         this.store = store;
     }
 
     public TransactionStatisticsResponse handleReportRequest(TransactionStatisticsRequest request) {
-        var relatedTransactionsIds = this.store.findByType(TransactionType.REVERSAL)
-                .stream().map(t -> t.relatedTransactionId()).collect(Collectors.toList());
+        var reversalRelatedTransactionIds = this.store.findByType(TransactionType.REVERSAL)
+                .stream().map(Transaction::relatedTransactionId).collect(Collectors.toList());
 
         var transactions = this.store.findByMerchantAndDateRangeAndType(
                 request.merchantName(),
@@ -149,7 +146,7 @@ class TransactionStatisticsService implements TransactionStatisticsReportHandler
         );
 
         var filtered = transactions.stream()
-                .filter(t -> !relatedTransactionsIds.contains(t.id()))
+                .filter(t -> !reversalRelatedTransactionIds.contains(t.id()))
                 .collect(Collectors.toList());
 
         if (filtered.isEmpty()) {
