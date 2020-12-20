@@ -1,8 +1,8 @@
 # A Simple Transaction Analyzer
 
-A Simple Transaction Analyzer which is use for loading transaction records from CSV files and generating statistics report after analyzing the loaded data.
+This application is use for loading transaction records from the existing CSV files and generating statistics report after analyzing the loaded data.
 
-It is implemented in different languages and technologies.
+The implementaions are provided in different languages and technologies.
 
 * [Java](./java)
 * [Java with DDD/Onion/Hexagon Architecture](./java-ddd)
