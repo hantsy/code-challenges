@@ -1,0 +1,28 @@
+{
+    "name": "hantsy/transaction-analyzer-php",
+    "description": "A simple transaction analyzer implemented in PHP 8.0",
+    "type": "project",
+    "require": {
+        "php": "^8.0",
+        "myclabs/php-enum": "^1.7",
+        "brick/math": "^0.9.1",
+        "brick/date-time": "^0.2.2"
+    },
+    "autoload": {
+        "psr-4": {
+            "Hantsy\\TransactionAnalyser\\": "src/"
+        }
+    },
+    "scripts": {
+        "run": [
+            "Hantsy\\TransactionAnalyser\\Main::run"
+        ]
+    },
+    "license": "GPL-3.0-or-later",
+    "authors": [
+        {
+            "name": "hantsy",
+            "email": "hantsy@gmail.com"
+        }
+    ]
+}
