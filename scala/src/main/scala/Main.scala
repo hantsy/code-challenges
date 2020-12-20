@@ -4,18 +4,17 @@ import java.io.InputStream
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.Scanner
 import scala.io.Source
+import scala.io.StdIn.readLine
 
 object Main extends App {
 
-  val scanner: Scanner = new Scanner(System.in)
-  System.out.println("fromDate (dd/MM/yyyy HH:mm:ss):")
-  val fromDate: String = scanner.nextLine
-  System.out.println("toDate (dd/MM/yyyy HH:mm:ss):")
-  val toDate: String = scanner.nextLine
-  System.out.println("merchant:")
-  val merchant: String = scanner.nextLine
+  println("fromDate (dd/MM/yyyy HH:mm:ss):")
+  val fromDate: String = readLine()
+  println("toDate (dd/MM/yyyy HH:mm:ss):")
+  val toDate: String = readLine()
+  println("merchant:")
+  val merchant: String = readLine()
   //load file
   val input: InputStream = getClass.getResourceAsStream("input.csv")
   //parse and query
@@ -27,16 +26,17 @@ object Main extends App {
     )
   //print result
   if (result.isEmpty) {
-    System.out.println("No transactions found.")
+    println("No transactions found.")
   }
   else {
-    val printTemplate: String ="""
+    val printTemplate: String =
+      """
                     Number of transactions = %d
                     Average Transaction Value = %s
                     """
-    val sum: BigDecimal = result.map(t => t.amount).sum
+    val sum: BigDecimal = result.map(_.amount).sum
     val avg: BigDecimal = sum / BigDecimal(result.size)
-    System.out.println(printTemplate.formatted(result.size, new DecimalFormat("#0.##").format(avg)))
+    println(printTemplate.formatted(result.size, new DecimalFormat("#0.##").format(avg)))
   }
 
 }
@@ -45,8 +45,8 @@ class TransactionRepository(loader: TransactionLoader) {
   var data: List[Transaction] = loader.load()
 
   def queryByMerchantAndDateRange(merchant: String, fromDate: LocalDateTime, toDate: LocalDateTime): List[Transaction] = {
-    val reversal: List[String] = data.filter((it: Transaction) => it.`type` eq TransactionType.REVERSAL)
-      .map(t => t.relatedTransactionId)
+    val reversal: List[String] = data.filter(_.`type` eq TransactionType.REVERSAL)
+      .map(_.relatedTransactionId)
 
     data.filter((it: Transaction) => it.merchantName == merchant
       && it.transactedAt.isAfter(fromDate)

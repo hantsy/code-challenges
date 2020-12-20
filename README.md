@@ -1,9 +1,13 @@
-# transaction-analyser
+# A Simple Transaction Analyzer
 
-A Simple Transaction Analyzer to load and parse transaction records from CSV files.
+A Simple Transaction Analyzer which is use for loading transaction records from CSV files and generating statistics reporting after analyzing the loaded data.
+
+It is implemented in different languages and technologies.
 
 * [Java](./java)
+* [Java with DDD/Onion/Hexagon Architecture](./java-ddd)
 * [Kotlin](./kotlin) 
+* [Scala](./scala) 
 
 ## More ...
 
