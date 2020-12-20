@@ -1,6 +1,6 @@
-# A Simple Transaction Analyzer
+# Transaction Analyzer
 
-This application is use for loading transaction records from the existing CSV files and generating statistics report after analyzing the loaded data.
+The *Transaction Analyzer* application is use for loading transaction records from the existing CSV files and generating statistics report after analyzing the loaded data.
 
 The implementaions are provided in different languages and technologies.
 
