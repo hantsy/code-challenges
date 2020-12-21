@@ -21,7 +21,7 @@ Want to explore an example close to real world applications with testing codes a
 
 * https://github.com/hantsy/spring-reactive-jwt-sample
 
-Feel tired with frameworks and return back to Java EE/Jakarta EE, it is also great. Check the following template project to start your Jakarta EE projects freely. These projects include sample test codes against the popluar application servers, such as WildFly, Payara/Glassfish, Open Liberty, Apache TomEE, etc.
+Feel tired with frameworks and return back to Java EE/Jakarta EE, it is also great. Check the following template projects to start your Jakarta EE application development freely. These projects include sample test codes and configurations with Arquillian against the popluar application servers, such as WildFly, Payara/Glassfish, Open Liberty, Apache TomEE, etc.
 
 * https://github.com/hantsy/jakartaee8-starter
 * https://github.com/hantsy/jakartaee9-starter-boilerplate
