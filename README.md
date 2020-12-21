@@ -8,19 +8,22 @@ The implementaions are provided in different languages and technologies.
 * [Java with DDD/Onion/Hexagon Architecture](./java-ddd)
 * [Kotlin](./kotlin) 
 * [Scala](./scala) 
+* [PHP](./php) 
 
 ## More ...
 
-More Kotlin sample projects based on Spring stack.
+Desire to dive deeper in more Kotlin examples, check the following projects which used Kotlin with the cool Spring support, including Kotlin Coroutines and Kotlin DSL.
 
 * https://github.com/hantsy/spring-kotlin-coroutines-sample
 * https://github.com/hantsy/spring-kotlin-dsl-sample 
 
-Want to explore full Spring testing codes with several CI/CD integration configuration(Github Actions, Travis, Circle, Codefresh, Drone, SemaphoreCI, Appveyor, Shippable, etc.), check this sample project.
+Want to explore an example close to real world applications with testing codes and CI/CD integrations. Check the following example which is configured with most the popluar CI service, including Github Actions, Travis, Circle, Codefresh, Drone, SemaphoreCI, Appveyor, Shippable, etc.
 
 * https://github.com/hantsy/spring-reactive-jwt-sample
 
-Like Java EE/Jakarta EE samples with Testing ready codes and CI/CD configuration(Github actions with different application servers, WildFly, Payara/Glassfish, Open Liberty, Apache TomEE, etc), check these samples.
+Feel tired with frameworks and return back to Java EE/Jakarta EE, it is also great. Check the following template project to start your Jakarta EE projects freely. These projects include sample test codes against the popluar application servers, such as WildFly, Payara/Glassfish, Open Liberty, Apache TomEE, etc.
 
 * https://github.com/hantsy/jakartaee8-starter
 * https://github.com/hantsy/jakartaee9-starter-boilerplate
+
+Enjoy!
