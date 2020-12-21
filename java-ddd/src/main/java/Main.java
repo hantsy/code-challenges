@@ -5,13 +5,13 @@ import java.io.InputStreamReader;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
-import java.util.Scanner;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 public class Main {
+    private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
         var scanner = new Scanner(System.in);
@@ -22,28 +22,34 @@ public class Main {
         System.out.println("merchant:");
         var merchant = scanner.nextLine();
 
+        //registering notifiers.
+        NotifiterRegistry.register(new SlackNotifier(), new EmailNotifier(), notification -> LOGGER.info("Sent from a dummy notifier"));
+
         // loading file
         var input = Main.class.getResourceAsStream("input.csv");
 
         // declare a TransactionLoader.
-        var store = new TransactionStore(input);
+        var loader = new TransactionLoaderAdapter(input);
 
-        // loading data from input stream
-        var loadedTransactions = store.load();
+        // declare a TransactionPersister.
+        // it is also a `TransactionRepository`
+        var store = new TransactionStoreAdapter();
 
-        // persisting the loaded data.
-        // it could be a different handler in the real world application, eg.
-        // TransactionPersister persister = new ...()
-        // persister.persist()
-        store.persist(loadedTransactions);
+        // declare a TransactionLoadService to load transactions from CSV files
+        // and persist them into database.
+        var loadService = new TransactionLoadService(loader, store);
+        loadService.loadAndPersist();
+
+        // initializing a `TransactionQueryService`.
+        // The `store` is a `TransactionRepository` for queries.
+        var queryService = new TransactionQueryService(store);
 
         // declare a TransactionStatisticsReportHandler and assemble the dependencies
-        // The `store` could be the `TransactionRepository` for queries in a real world application.
-        TransactionStatisticsReportHandler service = new TransactionStatisticsService(store);
+        var handler = new TransactionStatisticsReportHandlerAdapter(queryService);
 
         // now try to instantiate a client
         // set the report handler instance
-        var client = new TransactionStatisticsReportRequestor(service);
+        var client = new TransactionStatisticsReportRequestor(handler);
 
         // gather the input data and send a request and get the report result now.
         var report = client.sendRequest(
@@ -124,30 +130,22 @@ interface TransactionStatisticsReportHandler {
     TransactionStatisticsResponse handleReportRequest(TransactionStatisticsRequest request);
 }
 
+class TransactionStatisticsReportHandlerAdapter implements TransactionStatisticsReportHandler {
 
-class TransactionStatisticsService implements TransactionStatisticsReportHandler {
+    //in a real world application, it could be an interfaces.
+    private final TransactionQueryService service;
 
-    //in a real world application, it could be injected by different interfaces.
-    private final TransactionRepository store;
-
-    TransactionStatisticsService(TransactionRepository store) {
-        this.store = store;
+    TransactionStatisticsReportHandlerAdapter(TransactionQueryService service) {
+        this.service = service;
     }
 
     public TransactionStatisticsResponse handleReportRequest(TransactionStatisticsRequest request) {
-        var reversalRelatedTransactionIds = this.store.findByType(TransactionType.REVERSAL)
-                .stream().map(Transaction::relatedTransactionId).collect(Collectors.toList());
 
-        var transactions = this.store.findByMerchantAndDateRangeAndType(
+        var filtered = this.service.queryValidPaymentTransactions(
                 request.merchantName(),
                 request.fromDate(),
-                request.toDate(),
-                TransactionType.PAYMENT
+                request.toDate()
         );
-
-        var filtered = transactions.stream()
-                .filter(t -> !reversalRelatedTransactionIds.contains(t.id()))
-                .collect(Collectors.toList());
 
         if (filtered.isEmpty()) {
             return new TransactionStatisticsResponse.NotFound();
@@ -159,15 +157,123 @@ class TransactionStatisticsService implements TransactionStatisticsReportHandler
             var avg = sum.divide(new BigDecimal(filtered.size()));
             return new TransactionStatisticsResponse.Found(count, sum, avg);
         }
-
     }
 }
 
-class TransactionStore implements TransactionLoader, TransactionPersister, TransactionRepository {
-    private final InputStream source;
-    private List<Transaction> data;
+// Implementing use case for getting valid transactions.
+//
+// Return all transactions according to the given merchant, fromDate, toDate, and filter transactions:
+// 1. all `REVERSAL` transactions should be excluded.
+// 2. if the transaction type is `PAYMENT`, but there is an existing `REVERSAL` transaction related to it,
+// it also should be excluded.
+class TransactionQueryService {
+    private static final Logger LOGGER = Logger.getLogger(TransactionQueryService.class.getName());
 
-    public TransactionStore(InputStream source) {
+    private final TransactionRepository store;
+
+    TransactionQueryService(TransactionRepository store) {
+        this.store = store;
+    }
+
+    public List<Transaction> queryValidPaymentTransactions(String merchant, LocalDateTime fromDate, LocalDateTime toDate) {
+        var reversalRelatedTransactionIds = this.store.findByType(TransactionType.REVERSAL)
+                .stream().map(Transaction::relatedTransactionId).collect(Collectors.toList());
+
+        var transactions = this.store.findByMerchantAndDateRangeAndType(
+                merchant,
+                fromDate,
+                toDate,
+                TransactionType.PAYMENT
+        );
+
+        var filtered = transactions.stream()
+                .filter(t -> !reversalRelatedTransactionIds.contains(t.id()))
+                .collect(Collectors.toList());
+        LOGGER.log(Level.INFO, "{0} transactions found.", filtered.size());
+
+        // send notifications.
+        // a better solution: publisher/subscriber pattern to decouple Notifiter API from service.
+        NotifiterRegistry.availableNotifiers().forEach(
+                notifier -> notifier.notify(new Notification("queryValidPaymentTransactions is executed.", LocalDateTime.now()))
+        );
+        return filtered;
+    }
+}
+
+class NotifiterRegistry {
+    private static final List<Notifier> notifiers = new ArrayList<>();
+
+    public static void register(Notifier... notifier) {
+        notifiers.addAll(Arrays.asList(notifier));
+    }
+
+    public static List<Notifier> availableNotifiers() {
+        return notifiers;
+    }
+}
+
+//adapter to email service.
+class EmailNotifier implements Notifier {
+    private static final Logger LOGGER = Logger.getLogger(EmailNotifier.class.getName());
+
+    @Override
+    public void notify(Notification notification) {
+        LOGGER.log(Level.INFO, "send notification by email: {0}", new Object[]{notification});
+        //...
+    }
+}
+
+//adapter to slack notifier
+class SlackNotifier implements Notifier {
+    private static final Logger LOGGER = Logger.getLogger(SlackNotifier.class.getName());
+
+    @Override
+    public void notify(Notification notification) {
+        LOGGER.log(Level.INFO, "send notification to slack channel: {0}", new Object[]{notification});
+        //...
+    }
+}
+
+interface Notifier {
+    void notify(Notification notification);
+}
+
+record Notification(
+        String message,
+        LocalDateTime sentAt
+) {
+}
+
+// Implementing the use case of Loading transactions.
+//
+//in a real world application, it is could be a mature ELT solution, such as Spring Batch, or Spring Cloud DataFlow.
+class TransactionLoadService {
+    private static final Logger LOGGER = Logger.getLogger(TransactionLoadService.class.getName());
+
+    private final TransactionLoader loader;
+    private final TransactionPersister persister;
+
+    public TransactionLoadService(TransactionLoader loader, TransactionPersister persister) {
+        this.loader = loader;
+        this.persister = persister;
+    }
+
+    public void loadAndPersist() {
+        var transactions = this.loader.load();
+        LOGGER.log(Level.INFO, "{0} transactions loaded from csv files", transactions.size());
+        this.persister.persist(transactions);
+    }
+}
+
+class InMemoryDb {
+    static List<Transaction> data = Collections.emptyList();
+}
+
+class TransactionLoaderAdapter implements TransactionLoader {
+
+    private final InputStream source;
+
+    public TransactionLoaderAdapter(InputStream source) {
         this.source = source;
     }
 
@@ -193,23 +299,29 @@ class TransactionStore implements TransactionLoader, TransactionPersister, Trans
                 fields.length == 6 ? fields[5].trim() : null
         );
     }
+}
+
+class TransactionStoreAdapter implements TransactionPersister, TransactionRepository {
+
+    public TransactionStoreAdapter() {
+    }
 
     @Override
     public void persist(List<Transaction> data) {
         // in a real world application, it maybe call the database operations or invoke remote requests.
-        this.data = data;
+        InMemoryDb.data = data;
     }
 
     @Override
     public List<Transaction> findByType(TransactionType type) {
-        return data.stream()
+        return InMemoryDb.data.stream()
                 .filter(it -> it.type() == type)
                 .collect(Collectors.toList());
     }
 
     @Override
     public List<Transaction> findByMerchantAndDateRangeAndType(String merchant, LocalDateTime fromDate, LocalDateTime toDate, TransactionType type) {
-        return data.stream()
+        return InMemoryDb.data.stream()
                 .filter(it -> it.merchantName().equals(merchant)
                         && it.transactedAt().isAfter(fromDate)
                         && it.transactedAt().isBefore(toDate)
