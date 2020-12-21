@@ -45,14 +45,16 @@ class TransactionRepository(loader: TransactionLoader) {
   var data: List[Transaction] = loader.load()
 
   def queryByMerchantAndDateRange(merchant: String, fromDate: LocalDateTime, toDate: LocalDateTime): List[Transaction] = {
-    val reversal: List[String] = data.filter(_.`type` eq TransactionType.REVERSAL)
+    val reversalRelatedTransactionIds: List[String] = data.filter(_.`type` eq TransactionType.REVERSAL)
       .map(_.relatedTransactionId)
+      .filter(_.isDefined)
+      .map(_.get)
 
     data.filter((it: Transaction) => it.merchantName == merchant
       && it.transactedAt.isAfter(fromDate)
       && it.transactedAt.isBefore(toDate)
       && (it.`type` ne TransactionType.REVERSAL)
-      && !reversal.contains(it.id)
+      && !reversalRelatedTransactionIds.contains(it.id)
     )
   }
 }
@@ -73,7 +75,7 @@ class TransactionLoader(source: InputStream) {
       BigDecimal(fields(2).trim),
       fields(3).trim,
       TransactionType.withName(fields(4).trim),
-      if (fields.length == 6) fields(5).trim else null
+      if (fields.length == 6) Some(fields(5).trim) else None
     )
   }
 
@@ -86,7 +88,7 @@ case class Transaction(
                         amount: BigDecimal,
                         merchantName: String,
                         `type`: TransactionType,
-                        relatedTransactionId: String) {
+                        relatedTransactionId: Option[String]) {
 }
 
 object TransactionType extends Enumeration {
