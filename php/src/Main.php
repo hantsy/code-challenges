@@ -2,9 +2,7 @@
 
 namespace Hantsy\TransactionAnalyser;
 
-use Brick\DateTime\LocalDateTime;
 use Brick\Math\BigDecimal;
-use DateTime;
 
 class Main
 {
@@ -20,39 +18,15 @@ class Main
 
         // loading data.
         $loader = new TransactionLoader($file);
-        $transactions = $loader->load();
 
-        //var_dump($transactions);
-        // generating report.
-        $reversalTransactions = array_filter($transactions,
-            function ($v, $k) {
-                return $v->getType() == TransactionType::REVERSAL;
-            },
-            ARRAY_FILTER_USE_BOTH
-        );
+        //define repository
+        $repository = new TransactionRepository($loader);
 
-        echo "\$reversalTransactions:" . PHP_EOL;
-        var_dump($reversalTransactions);
-
-        $reversalRelatedTransactionIds = array_map(
-            function ($v) {
-                return $v->getRelatedTransactionId();
-            },
-            $reversalTransactions
-        );
-
-        echo "\$reversalRelatedTransactionIds:" . PHP_EOL;
-        var_dump($reversalRelatedTransactionIds);
-
-        $filteredTransactions = array_filter($transactions,
-            function ($v, $k) use ($reversalRelatedTransactionIds, $toDate, $fromDate, $merchant) {
-                return $v->getMerchantName() == $merchant
-                    && $v->getTransactedAt()->isAfter(LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $fromDate)))
-                    && $v->getTransactedAt()->isBefore(LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $toDate)))
-                    && $v->getType() == TransactionType::PAYMENT
-                    && !in_array($v->getId(), $reversalRelatedTransactionIds);
-            },
-            ARRAY_FILTER_USE_BOTH
+        //query result
+        $filteredTransactions = $repository->queryByMerchantAndDateRange(
+            $merchant,
+            $fromDate,
+            $toDate
         );
 
         echo "\$filteredTransactions:" . PHP_EOL;
@@ -63,8 +37,7 @@ class Main
         } else {
             $sum = array_reduce(
                 $filteredTransactions,
-                function ($carry, $item)
-                {
+                function ($carry, $item) {
                     return $carry->plus($item->getAmount());
                 },
                 BigDecimal::zero()
@@ -76,7 +49,6 @@ class Main
             echo "Total Transaction Value = " . number_format($sum->toFloat(), 2) . PHP_EOL;
             echo "Average Transaction Value = " . number_format($avg->toFloat(), 2) . PHP_EOL;
         }
-
 
     }
 

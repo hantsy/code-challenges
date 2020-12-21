@@ -5,7 +5,6 @@ namespace Hantsy\TransactionAnalyser;
 use Brick\DateTime\LocalDateTime;
 use Brick\Math\BigDecimal;
 use DateTime;
-use function Brick\Math\BigDecimal;
 
 class TransactionLoader
 {
