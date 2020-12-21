@@ -133,9 +133,9 @@ interface TransactionStatisticsReportHandler {
 class TransactionStatisticsReportHandlerAdapter implements TransactionStatisticsReportHandler {
 
     //in a real world application, it could be an interfaces.
-    private final TransactionQueryService service;
+    private final GetAllValidPaymentTransactionsUseCase service;
 
-    TransactionStatisticsReportHandlerAdapter(TransactionQueryService service) {
+    TransactionStatisticsReportHandlerAdapter(GetAllValidPaymentTransactionsUseCase service) {
         this.service = service;
     }
 
@@ -160,13 +160,18 @@ class TransactionStatisticsReportHandlerAdapter implements TransactionStatistics
     }
 }
 
-// Implementing use case for getting valid transactions.
+//the use case of return all valid transactions.
+interface GetAllValidPaymentTransactionsUseCase {
+    List<Transaction> queryValidPaymentTransactions(String merchant, LocalDateTime fromDate, LocalDateTime toDate);
+}
+
+// Implementing GetAllValidPaymentTransactionsUseCase.
 //
 // Return all transactions according to the given merchant, fromDate, toDate, and filter transactions:
 // 1. all `REVERSAL` transactions should be excluded.
 // 2. if the transaction type is `PAYMENT`, but there is an existing `REVERSAL` transaction related to it,
 // it also should be excluded.
-class TransactionQueryService {
+class TransactionQueryService implements GetAllValidPaymentTransactionsUseCase {
     private static final Logger LOGGER = Logger.getLogger(TransactionQueryService.class.getName());
 
     private final TransactionRepository store;
@@ -244,10 +249,15 @@ record Notification(
 ) {
 }
 
-// Implementing the use case of Loading transactions.
+// the use case of Loading transactions.
+interface LoadTransactionRecordsFromCsvUseCase {
+    void loadAndPersist();
+}
+
+// Implementing LoadTransactionRecordsFromCsvUseCase.
 //
 //in a real world application, it is could be a mature ELT solution, such as Spring Batch, or Spring Cloud DataFlow.
-class TransactionLoadService {
+class TransactionLoadService implements LoadTransactionRecordsFromCsvUseCase {
     private static final Logger LOGGER = Logger.getLogger(TransactionLoadService.class.getName());
 
     private final TransactionLoader loader;
