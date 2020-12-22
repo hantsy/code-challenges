@@ -31,3 +31,6 @@ dist
 node_modules
 .vscode
 .metals
+.classpath
+.project
+.settings
