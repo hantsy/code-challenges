@@ -27,3 +27,6 @@ target
 .bsp
 nbproject
 vendor
+dist
+node_modules
+.vscode
