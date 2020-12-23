@@ -4,9 +4,9 @@ using System.Linq;
 
 namespace TransactionAnalyzer
 {
-    class Program
+    internal class Program
     {
-        static void Main(string[] args)
+        private static void Main(string[] args)
         {
             Console.WriteLine("Hello World!");
             Console.WriteLine("Current time is: " + DateTime.Now);
@@ -33,9 +33,9 @@ namespace TransactionAnalyzer
             {
                 var sum = filtered.Sum(s => s.Amount);
                 var avg = filtered.Average(s => s.Amount);
-                
+
                 Console.WriteLine($"Number of transactions = {filtered.Length}");
-                Console.WriteLine($"Total Transaction Value = {sum:0.0#}");    
+                Console.WriteLine($"Total Transaction Value = {sum:0.0#}");
                 Console.WriteLine($"Average Transaction Value ={avg:0.0#}");
             }
         }

@@ -1,23 +1,22 @@
-
 using System;
 using System.Globalization;
 using System.IO;
 using System.Linq;
 
-
 namespace TransactionAnalyzer
 {
-    class TransactionLoader
+    internal class TransactionLoader
     {
         private readonly string _csvFilePath;
+
         public TransactionLoader(string csvFilePath)
         {
-            this._csvFilePath = csvFilePath;
+            _csvFilePath = csvFilePath;
         }
-        
+
         public Transaction[] Load()
         {
-            var lines = File.ReadAllLines(this._csvFilePath);
+            var lines = File.ReadAllLines(_csvFilePath);
             return lines.Skip(1).Select(BuildTransaction).ToArray();
         }
 
@@ -26,11 +25,12 @@ namespace TransactionAnalyzer
             Console.WriteLine("reading line:" + line);
             // Split into array
             var fields = line.Split(",");
-            Console.WriteLine("Split into fields:" +fields.Length);
-            
+            Console.WriteLine("Split into fields:" + fields.Length);
+
             //try to parse the fields
             Enum.TryParse(fields[4].Trim(), out TransactionType parsedType);
-            DateTime.TryParseExact(fields[1].Trim(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,DateTimeStyles.None, out DateTime parsedTransactedAt);
+            DateTime.TryParseExact(fields[1].Trim(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
+                DateTimeStyles.None, out var parsedTransactedAt);
             return new Transaction(
                 fields[0].Trim(),
                 parsedTransactedAt,
@@ -41,5 +41,4 @@ namespace TransactionAnalyzer
             );
         }
     }
-    
 }

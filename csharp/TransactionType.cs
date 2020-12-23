@@ -1,8 +1,8 @@
 namespace TransactionAnalyzer
 {
-    enum TransactionType
+    internal enum TransactionType
     {
         PAYMENT,
-        REVERSAL,
+        REVERSAL
     }
 }

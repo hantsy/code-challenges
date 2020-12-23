@@ -3,7 +3,7 @@ using System;
 
 namespace TransactionAnalyzer
 {
-    record Transaction(
+    internal record Transaction(
         string Id,
         DateTime TransactedAt,
         decimal Amount,
@@ -11,5 +11,6 @@ namespace TransactionAnalyzer
         TransactionType Type,
         string? RelatedTransactionId
     )
-    { }
+    {
+    }
 }
