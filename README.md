@@ -9,6 +9,8 @@ The implementaions are provided in different languages and technologies.
 * [Kotlin](./kotlin) 
 * [Scala](./scala) 
 * [PHP](./php) 
+* [C#](./csharp) 
+* [Node(Typescript)](./node-typescript) 
 
 ## More ...
 
