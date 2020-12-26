@@ -6,6 +6,7 @@ The implementaions are provided in different languages and technologies.
 
 * [Java](./java)
 * [Java with DDD/Onion/Hexagon Architecture](./java-ddd)
+* [Java Functional Programming(Function, Supplier, Consumer, CompletableFuture)](./java-fn)
 * [Kotlin](./kotlin) 
 * [Scala](./scala) 
 * [PHP](./php) 
