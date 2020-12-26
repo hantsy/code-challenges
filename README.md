@@ -1,11 +1,50 @@
 # Transaction Analyzer
 
-The *Transaction Analyzer* application is use for loading transaction records from the existing CSV files and generating statistics report after analyzing the loaded data.
+The *Transaction Analyzer* application is use for loading transaction records from an existing CSV files and generating statistics report after analyzing the loaded data.
 
-The implementaions are provided in different languages and technologies.
+## Requirements
+
+Given a CSV file contains some transaction records  from a financial system, design an application to analyze the data in the CSV file and generate a statistics report.
+
+When analyzing the records, the `REVERSAL` transaction and it related transaction should be excluded.
+
+Assume there is an CSV example file contains the following transactions.
+
+```csv
+ID, Date, Amount, Merchant, Type, Related Transaction
+WLMFRDGD, 20/08/2020 12:45:33, 59.99, Kwik-E-Mart, PAYMENT,
+YGXKOEIA, 20/08/2020 12:46:17, 10.95, Kwik-E-Mart, PAYMENT,
+LFVCTEYM, 20/08/2020 12:50:02, 5.00, MacLaren, PAYMENT,
+SUOVOISP, 20/08/2020 13:12:22, 5.00, Kwik-E-Mart, PAYMENT,
+AKNBVHMN, 20/08/2020 13:14:11, 10.95, Kwik-E-Mart, REVERSAL, YGXKOEIA
+JYAPKZFZ, 20/08/2020 14:07:10, 99.50, MacLaren, PAYMENT,
+```
+
+ When user input the following arguments as query criteria.
+
+```bash
+fromDate: 20/08/2020 12:00:00
+toDate: 20/08/2020 13:00:00
+merchant: Kwik-E-Mart
+```
+
+It should output the result similar to this.
+
+```bash
+Number of transactions = 1
+Average Transaction Value = 59.99
+```
+
+
+
+## Implementations
+
+To make things simpler,  I didn't use any third party library to parse the CSV file, and also didn't  adopt a database to store the parsed data from CSV, all the analyzing work is done in memory.
+
+As as  a toy for myself, I've created a collection of implementations written in different languages and techniques.
 
 * [Java](./java)
-* [Java with DDD/Onion/Hexagon Architecture](./java-ddd)
+* [Java with DDD/Onion/Hexagon Architecture](./java-ddd) (Working in progres)
 * [Java Functional Programming(Function, Supplier, Consumer, CompletableFuture)](./java-fn)
 * [Kotlin](./kotlin) 
 * [Scala](./scala) 
