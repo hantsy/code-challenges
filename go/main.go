@@ -33,17 +33,23 @@ func (t TransactionRepository) QueryByMerchantAndDateRange(
 	merchant string,
 	fromDate time.Time,
 	toDate time.Time) []Transaction {
-	var relatedIds []string
+	fmt.Println("calling QueryByMerchantAndDateRange", merchant, fromDate, toDate)
+
+	//load transaction from csv file
 	transactions, _ := t.loader.Load()
+	fmt.Println("loaded transactions:", transactions)
+
+	// filtered related transactions
+	var relatedIds []string
 	for _, value := range transactions {
 		if value.Type == REVERSAL {
 			relatedIds = append(relatedIds, value.RelatedTransactionId)
 		}
 	}
-
+	fmt.Println("reversal related ids:", relatedIds)
 	var filtered []Transaction
 	for _, value := range transactions {
-		if value.MerchantName == merchant && value.Type == PAYMENT && value.TransactedAt.Before(toDate) && value.TransactedAt.After(fromDate) && slice.ContainsString(relatedIds, value.Id) {
+		if value.MerchantName == merchant && value.Type == PAYMENT && value.TransactedAt.Before(toDate) && value.TransactedAt.After(fromDate) && !slice.ContainsString(relatedIds, value.Id) {
 			filtered = append(filtered, value)
 		}
 	}
@@ -74,21 +80,25 @@ func (t TransactionLoader) Load() (result []Transaction, err error) {
 
 	var lines []string
 	rd := bufio.NewReader(f)
+
+	//skip csv header line.
 	firstline := true
 	for {
-		if !firstline {
-			line, err := rd.ReadString('\n')
-			if err != nil {
-				if err == io.EOF {
-					break
-				}
-
-				log.Fatalf("read file line error: %v", err)
-				return nil, err
+		line, err := rd.ReadString('\n')
+		if err != nil {
+			if err == io.EOF {
+				break
 			}
+
+			log.Fatalf("read file line error: %v", err)
+			return nil, err
+		}
+
+		if firstline == false {
 			str := strings.TrimSpace(line)
 			lines = append(lines, str)
 		}
+
 		firstline = false
 	}
 
@@ -96,15 +106,15 @@ func (t TransactionLoader) Load() (result []Transaction, err error) {
 	for _, value := range lines {
 		fields := strings.Split(value, ",")
 
-		transactedAt, _ := time.Parse("20/08/2020 14:07:10", fields[1])
-		amount, _ := new(big.Float).SetPrec(2).SetString(fields[1])
+		transactedAt, _ := time.Parse("02/01/2006 15:04:05", strings.TrimSpace(fields[1]))
+		amount, _, _ := new(big.Float).Parse(strings.TrimSpace(fields[2]), 10)
 		transaction := Transaction{
-			Id:                   fields[0],
+			Id:                   strings.TrimSpace(fields[0]),
 			TransactedAt:         transactedAt,
 			Amount:               amount,
-			MerchantName:         fields[3],
-			Type:                 TransactionType(fields[4]),
-			RelatedTransactionId: fields[5],
+			MerchantName:         strings.TrimSpace(fields[3]),
+			Type:                 TransactionType(strings.TrimSpace(fields[4])),
+			RelatedTransactionId: strings.TrimSpace(fields[5]),
 		}
 		transactions = append(transactions, transaction)
 	}
@@ -130,20 +140,23 @@ type Transaction struct {
 
 func main() {
 	fmt.Println("Go Go Go!")
-	var merchant string
-	var fromDate string
-	var toDate string
+
+	// user input.
+	scanner := bufio.NewScanner(os.Stdin)
 	fmt.Println("fromDate (dd/MM/yyyy HH:mm:ss):")
-	fmt.Scanf("%s", &fromDate)
+	scanner.Scan()
+	fromDate := scanner.Text()
 	fmt.Println("toDate (dd/MM/yyyy HH:mm:ss):")
-	fmt.Scanf("%s", &toDate)
+	scanner.Scan()
+	toDate := scanner.Text()
 	fmt.Println("merchant")
-	fmt.Scanf("%s", &merchant)
+	scanner.Scan()
+	merchant := scanner.Text()
 
 	//print all input data.
 	fmt.Println("all input data", fromDate, toDate, merchant)
-	parsedFromDate, _ := time.Parse("20/08/2020 14:07:10", fromDate)
-	parsedToDate, _ := time.Parse("20/08/2020 14:07:10", toDate)
+	parsedFromDate, _ := time.Parse("02/01/2006 15:04:05", fromDate)
+	parsedToDate, _ := time.Parse("02/01/2006 15:04:05", toDate)
 	var filtered = NewTransactionRepository(NewTransactionLoader("./input.csv")).QueryByMerchantAndDateRange(merchant, parsedFromDate, parsedToDate)
 
 	fmt.Println("filtered transactions:", filtered)
@@ -156,8 +169,8 @@ func main() {
 		}
 
 		avg := new(big.Float).Quo(sum, big.NewFloat(float64(ln)))
-		fmt.Printf("Number of tranactions:%d", ln)
-		fmt.Printf("Total transaction value is:%f", sum)
-		fmt.Printf("Average transaction value is:%f", avg)
+		fmt.Printf("Number of tranactions:%d \n", ln)
+		fmt.Printf("Total transaction value is:%.2f \n", sum)
+		fmt.Printf("Average transaction value is:%.2f \n", avg)
 	}
 }
