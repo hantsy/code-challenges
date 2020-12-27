@@ -1,7 +1,7 @@
 <?php
 
 
-namespace Hantsy\TransactionAnalyser;
+namespace TransactionAnalyser;
 
 
 use Brick\DateTime\LocalDateTime;
@@ -10,13 +10,13 @@ use DateTime;
 class TransactionRepository
 {
     /**
-     * @var TransactionLoader
+     * @var TransactionLoaderInterface
      */
-    private TransactionLoader $loader;
+    private TransactionLoaderInterface $loader;
 
     private array $transactions;
 
-    public function __construct(TransactionLoader $loader)
+    public function __construct(TransactionLoaderInterface $loader)
     {
         $this->loader = $loader;
         $this->transactions = $loader->load();
@@ -24,15 +24,15 @@ class TransactionRepository
 
     public function queryByMerchantAndDateRange(
         string $merchant,
-        string $fromDate,
-        string $toDate
+        LocalDateTime $fromDate,
+        LocalDateTime $toDate
     ): array
     {
         //var_dump($transactions);
         // generating report.
         $reversalTransactions = array_filter($this->transactions,
             function ($v, $k) {
-                return $v->getType() == TransactionType::REVERSAL;
+                return $v->getType() == TransactionType::REVERSAL();
             },
             ARRAY_FILTER_USE_BOTH
         );
@@ -53,9 +53,9 @@ class TransactionRepository
         return array_filter($this->transactions,
             callback: function ($v, $k) use ($reversalRelatedTransactionIds, $toDate, $fromDate, $merchant) {
                 return $v->getMerchantName() == $merchant
-                    && $v->getTransactedAt()->isAfter(LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $fromDate)))
-                    && $v->getTransactedAt()->isBefore(LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $toDate)))
-                    && $v->getType() == TransactionType::PAYMENT
+                    && $v->getTransactedAt()->isAfter($fromDate)
+                    && $v->getTransactedAt()->isBefore($toDate)
+                    && $v->getType() == TransactionType::PAYMENT()
                     && !in_array($v->getId(), $reversalRelatedTransactionIds);
             },
             mode: ARRAY_FILTER_USE_BOTH

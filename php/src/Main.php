@@ -1,8 +1,10 @@
 <?php
 
-namespace Hantsy\TransactionAnalyser;
+namespace TransactionAnalyser;
 
+use Brick\DateTime\LocalDateTime;
 use Brick\Math\BigDecimal;
+use DateTime;
 
 class Main
 {
@@ -25,8 +27,8 @@ class Main
         //query result
         $filteredTransactions = $repository->queryByMerchantAndDateRange(
             $merchant,
-            $fromDate,
-            $toDate
+            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $fromDate)),
+            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $toDate))
         );
 
         echo "\$filteredTransactions:" . PHP_EOL;

@@ -9,14 +9,26 @@
     "brick/date-time": "^0.2.2",
     "ext-readline": "*"
   },
+  "require-dev": {
+    "phpunit/phpunit": "^9.5"
+  },
   "autoload": {
+    "classmap": [
+      "src/"
+    ],
     "psr-4": {
-      "Hantsy\\TransactionAnalyser\\": "src/"
+      "TransactionAnalyser\\": "src/"
     }
   },
+  "autoload-dev": {
+    "psr-4": { "TransactionAnalyser\\Tests\\": "tests/" }
+  },
   "scripts": {
-    "run": [
-      "Hantsy\\TransactionAnalyser\\Main::run"
+    "start": [
+      "TransactionAnalyser\\Main::run"
+    ],
+    "test": [
+      "phpunit tests"
     ]
   },
   "license": "GPL-3.0-or-later",

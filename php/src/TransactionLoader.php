@@ -1,12 +1,12 @@
 <?php
 
-namespace Hantsy\TransactionAnalyser;
+namespace TransactionAnalyser;
 
 use Brick\DateTime\LocalDateTime;
 use Brick\Math\BigDecimal;
 use DateTime;
 
-class TransactionLoader
+class TransactionLoader implements TransactionLoaderInterface
 {
 
     private string $csvFile;
