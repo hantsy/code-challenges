@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using System.Linq;
+using TransactionAnalyzer.Lib;
 
 namespace TransactionAnalyzer
 {
@@ -36,7 +37,7 @@ namespace TransactionAnalyzer
 
                 Console.WriteLine($"Number of transactions = {filtered.Length}");
                 Console.WriteLine($"Total Transaction Value = {sum:0.0#}");
-                Console.WriteLine($"Average Transaction Value ={avg:0.0#}");
+                Console.WriteLine($"Average Transaction Value = {avg:0.0#}");
             }
         }
     }
