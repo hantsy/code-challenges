@@ -7,7 +7,7 @@ namespace TransactionAnalyzer.Lib
     {
         private readonly Transaction[] _data;
 
-        public TransactionRepository(TransactionLoader loader)
+        public TransactionRepository(ITransactionLoader loader)
         {
             _data = loader.Load();
         }

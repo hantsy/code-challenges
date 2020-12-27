@@ -5,7 +5,7 @@ using System.Linq;
 
 namespace TransactionAnalyzer.Lib
 {
-    public class TransactionLoader
+    public class TransactionLoader : ITransactionLoader
     {
         private readonly string _csvFilePath;
 
@@ -31,14 +31,14 @@ namespace TransactionAnalyzer.Lib
             Enum.TryParse(fields[4].Trim(), out TransactionType parsedType);
             DateTime.TryParseExact(fields[1].Trim(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
                 DateTimeStyles.None, out var parsedTransactedAt);
-            return new Transaction(
-                fields[0].Trim(),
-                parsedTransactedAt,
-                Convert.ToDecimal(fields[2].Trim()),
-                fields[3].Trim(),
-                parsedType,
-                fields[5]?.Trim()
-            );
+            return new Transaction{
+                Id = fields[0].Trim(),
+                TransactedAt = parsedTransactedAt,
+                Amount = Convert.ToDecimal(fields[2].Trim()),
+                MerchantName = fields[3].Trim(),
+                Type = parsedType,
+                RelatedTransactionId = fields[5]?.Trim()
+            };
         }
     }
 }
