@@ -34,8 +34,6 @@ node_modules
 .classpath
 .project
 .settings
-/csharp/obj
-/csharp/bin
 obj
 bin
 .vs
