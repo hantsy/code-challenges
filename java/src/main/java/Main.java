@@ -3,8 +3,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Collections;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -24,7 +26,7 @@ public class Main {
         var input = Main.class.getResourceAsStream("input.csv");
 
         //parse and query
-        var result = new TransactionRepository(new TransactionLoader(input))
+        var result = new TransactionRepository(new InputStreamTransactionLoader(input))
                 .queryByMerchantAndDateRange(
                         merchant,
                         LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
@@ -37,27 +39,24 @@ public class Main {
         } else {
             String printTemplate = """
                     Number of transactions = %d
+                    Total Transaction Value = %.2f
                     Average Transaction Value = %.2f
                     """;
             var sum = result.stream()
                     .map(Transaction::amount)
                     .reduce(BigDecimal.ZERO, BigDecimal::add);
-            var avg = sum.divide(new BigDecimal(result.size()));
-            System.out.println(printTemplate.formatted(result.size(), avg));
+            var avg = sum.divide(new BigDecimal(result.size()), RoundingMode.HALF_UP);
+            System.out.printf((printTemplate) + "%n", result.size(), sum, avg);
         }
     }
 }
 
 class TransactionRepository {
 
-    private List<Transaction> data;
+    private final TransactionLoader loader;
 
     TransactionRepository(TransactionLoader _loader) {
-        try {
-            this.data = _loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loader = _loader;
     }
 
     public List<Transaction> queryByMerchantAndDateRange(
@@ -65,6 +64,13 @@ class TransactionRepository {
             LocalDateTime fromDate,
             LocalDateTime toDate
     ) {
+        List<Transaction> data;
+        try {
+            data = this.loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+            data = Collections.emptyList();
+        }
         var reversal = data.stream()
                 .filter(it -> it.type() == TransactionType.REVERSAL)
                 .map(Transaction::relatedTransactionId)
@@ -73,7 +79,7 @@ class TransactionRepository {
                 .filter(it -> it.merchantName().equals(merchant)
                         && it.transactedAt().isAfter(fromDate)
                         && it.transactedAt().isBefore(toDate)
-                        && it.type() != TransactionType.REVERSAL
+                        && it.type() == TransactionType.PAYMENT
                         && !reversal.contains(it.id())
                 )
                 .collect(Collectors.toList());
@@ -81,13 +87,33 @@ class TransactionRepository {
 
 }
 
-class TransactionLoader {
+interface TransactionLoader {
+    List<Transaction> load() throws IOException;
+}
+
+/*
+class FileTransactionLoader implements TransactionLoader{
+
+    private final File file;
+
+    public FileTransactionLoader(File file) {
+        this.file = file;
+    }
+
+    @Override
+    public List<Transaction> load() throws IOException {
+        return null;
+    }
+}*/
+
+class InputStreamTransactionLoader implements TransactionLoader {
     final InputStream source;
 
-    public TransactionLoader(InputStream source) {
+    public InputStreamTransactionLoader(InputStream source) {
         this.source = source;
     }
 
+    @Override
     public List<Transaction> load() throws IOException {
         try (var reader = new BufferedReader(new InputStreamReader(this.source))) {
             return reader.lines().skip(1).map(this::buildTransaction).collect(Collectors.toList());
