@@ -1,5 +1,6 @@
 import io.kotest.matchers.comparables.shouldBeEqualComparingTo
 import io.kotest.matchers.date.shouldBeBefore
+import io.kotest.matchers.should
 import io.kotest.matchers.shouldBe
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Test
@@ -29,5 +30,9 @@ internal class TransactionTest {
         instance.merchantName shouldBe "testMerchant"
         instance.type shouldBe TransactionType.PAYMENT
         instance.relatedTransactionId shouldBe ""
+
+        instance should {
+            it.id shouldBe "test"
+        }
     }
 }

@@ -1,5 +1,7 @@
-import org.assertj.core.data.Offset;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInstance;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -8,52 +10,35 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.jupiter.api.DynamicTest.dynamicTest;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 
-class MainTest {
-
-    @Nested
-    class MainTestCase {
-        @BeforeEach
-        void setUp() {
-        }
-
-        @AfterEach
-        void tearDown() {
-        }
-
-        @Test
-        void testMain() {
-            Main.main(new String[]{});
-        }
-    }
-
+class TransactionRepositoryTest {
 
     @Nested
     @ExtendWith(MockitoExtension.class)
-    class TransactionRepository_InjectedMockLoaderTestCase {
+    @DisplayName("test against injected mock loader by annotations")
+    class InjectedMockLoaderTestCase {
 
-        @Mock TransactionLoader mockedLoader;
+        @Mock
+        TransactionLoader mockedLoader;
 
-        @InjectMocks TransactionRepository repository;
+        @InjectMocks
+        TransactionRepository repository;
 
         @Test
         void testQuery_MockLoader() throws IOException {
-            String fromDate ="20/08/2020 12:00:00";
-            String toDate="20/08/2020 13:00:00";
-            String merchant="Kwik-E-Mart";
+            String fromDate = "20/08/2020 12:00:00";
+            String toDate = "20/08/2020 13:00:00";
+            String merchant = "Kwik-E-Mart";
             given(mockedLoader.load()).willReturn(Fixtures.transactionData());
 
             var transactions = this.repository
@@ -70,7 +55,8 @@ class MainTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    class TransactionRepository_MockLoaderTestCase {
+    @DisplayName("test against manual mock loader")
+    class ManualMockLoaderTestCase {
 
         @ParameterizedTest
         @MethodSource("provideQueryCriteria")
@@ -90,8 +76,8 @@ class MainTest {
         }
 
 
-        Stream<Arguments> provideQueryCriteria(){
-            return  Stream.of(
+        Stream<Arguments> provideQueryCriteria() {
+            return Stream.of(
                     Arguments.of("20/08/2020 12:00:00", "20/08/2020 13:00:00", "Kwik-E-Mart", 1),
                     Arguments.of("20/08/2020 12:00:00", "20/08/2020 15:00:00", "MacLaren", 2)
             );
@@ -100,11 +86,12 @@ class MainTest {
 
     @TestInstance(TestInstance.Lifecycle.PER_CLASS)
     @Nested
-    class TransactionRepository_FakeLoaderTestCase{
+    @DisplayName("test against manual mock loader")
+    class FakeLoaderTestCase {
 
         @ParameterizedTest
         @MethodSource("provideQueryCriteria")
-        void testQuery_FakeLoader( String fromDate, String toDate, String merchant, int n){
+        void testQuery_FakeLoader(String fromDate, String toDate, String merchant, int n) {
             var loader = new FakeTransactionLoader();
             var transactions = new TransactionRepository(loader)
                     .queryByMerchantAndDateRange(
@@ -116,8 +103,8 @@ class MainTest {
         }
 
 
-        Stream<Arguments> provideQueryCriteria(){
-            return  Stream.of(
+        Stream<Arguments> provideQueryCriteria() {
+            return Stream.of(
                     Arguments.of("20/08/2020 12:00:00", "20/08/2020 13:00:00", "Kwik-E-Mart", 1),
                     Arguments.of("20/08/2020 12:00:00", "20/08/2020 15:00:00", "MacLaren", 2)
             );
@@ -125,14 +112,7 @@ class MainTest {
 
     }
 
-    class FakeTransactionLoader implements TransactionLoader {
-        @Override
-        public List<Transaction> load() throws IOException {
-            return Fixtures.transactionData();
-        }
-    }
-
-   /*
+    /*
     WLMFRDGD, 20/08/2020 12:45:33, 59.99, Kwik-E-Mart, PAYMENT,
     YGXKOEIA, 20/08/2020 12:46:17, 10.95, Kwik-E-Mart, PAYMENT,
     LFVCTEYM, 20/08/2020 12:50:02, 5.00, MacLaren, PAYMENT,
@@ -140,7 +120,7 @@ class MainTest {
     AKNBVHMN, 20/08/2020 13:14:11, 10.95, Kwik-E-Mart, REVERSAL, YGXKOEIA
     JYAPKZFZ, 20/08/2020 14:07:10, 99.50, MacLaren, PAYMENT,
     */
-    static class Fixtures{
+    static class Fixtures {
         public static List<Transaction> transactionData() {
             return List.of(
                     new Transaction("WLMFRDGD",
@@ -183,77 +163,11 @@ class MainTest {
         }
     }
 
-    @Nested
-    class TransactionLoaderTestCase {
 
-        @TestFactory
-        List<DynamicTest> testLoad() throws IOException {
-            return List.of(
-                    dynamicTest("test1", () -> {
-                        var data = """
-                                ID, Date, Amount, Merchant, Type, Related Transaction
-                                WLMFRDGD, 20/08/2020 12:45:33, 59.99, Kwik-E-Mart, PAYMENT,
-                                YGXKOEIA, 20/08/2020 12:46:17, 10.95, Kwik-E-Mart, PAYMENT,
-                                """;
-                        var loader = new InputStreamTransactionLoader(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));
-                        var loadedData = loader.load();
-                        assertThat(loadedData.size()).isEqualTo(2);
-
-                    }),
-                    dynamicTest("test2", () -> {
-                        var data = """
-                                ID, Date, Amount, Merchant, Type, Related Transaction
-                                WLMFRDGD, 20/08/2020 12:45:33, 59.99, Kwik-E-Mart, PAYMENT,
-                                """;
-                        var loader = new InputStreamTransactionLoader(new ByteArrayInputStream(data.getBytes(StandardCharsets.UTF_8)));
-                        var loadedData = loader.load();
-                        assertThat(loadedData.size()).isEqualTo(1);
-                    })
-            );
-
-        }
-
-    }
-
-
-    @Nested
-    class TransactionTypeTestCase {
-
-        @Test
-        void verifyTransactionTypePayment() {
-            assertThat(TransactionType.valueOf("PAYMENT")).isEqualTo(TransactionType.PAYMENT);
-        }
-
-        @Test
-        void verifyTransactionTypeReversal() {
-            assertThat(TransactionType.valueOf("REVERSAL")).isEqualTo(TransactionType.REVERSAL);
-        }
-    }
-
-
-    @Nested
-    class TransactionTestCase {
-
-        Transaction instance;
-
-        @BeforeEach
-        void setUp() {
-            instance = new Transaction("test",
-                    LocalDateTime.now(),
-                    BigDecimal.valueOf(5.0),
-                    "testMerchant",
-                    TransactionType.PAYMENT,
-                    "");
-        }
-
-        @Test
-        void verifyInstance() {
-            assertThat(instance.id()).isEqualTo("test");
-            assertThat(instance.type()).isEqualTo(TransactionType.PAYMENT);
-            assertThat(instance.transactedAt()).isBefore(LocalDateTime.now());
-            assertThat(instance.relatedTransactionId()).isEmpty();
-            assertThat(instance.amount()).isCloseTo(BigDecimal.valueOf(5.00), Offset.offset(BigDecimal.valueOf(0.01)));
-            assertThat(instance.merchantName()).isEqualTo("testMerchant");
+    static class FakeTransactionLoader implements TransactionLoader {
+        @Override
+        public List<Transaction> load() {
+            return Fixtures.transactionData();
         }
     }
 }
