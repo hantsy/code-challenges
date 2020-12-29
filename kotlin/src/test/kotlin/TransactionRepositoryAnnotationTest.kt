@@ -25,7 +25,7 @@ internal class TransactionRepositoryAnnotationTest {
     private val fakeTransactionData = Fixtures.transactionData
 
     @Test
-    fun `load from inputstream`() {
+    fun `test queryByMerchantAndDateRange against mock loader(Annotations)`() {
         val fromDate = "20/08/2020 12:00:00"
         val toDate = "20/08/2020 13:00:00"
         val merchant = "Kwik-E-Mart"
