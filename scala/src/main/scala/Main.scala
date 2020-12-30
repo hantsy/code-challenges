@@ -4,7 +4,6 @@ import java.io.InputStream
 import java.text.DecimalFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import scala.io.Source
 import scala.io.StdIn.readLine
 
 object Main extends App {
@@ -17,12 +16,13 @@ object Main extends App {
   val merchant: String = readLine()
   //load file
   val input: InputStream = getClass.getResourceAsStream("input.csv")
+  private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
   //parse and query
   val result: List[Transaction] = new TransactionRepository(new TransactionLoader(input))
     .queryByMerchantAndDateRange(
       merchant,
-      LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-      LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+      LocalDateTime.parse(fromDate, dateTimeFormatter),
+      LocalDateTime.parse(toDate, dateTimeFormatter)
     )
   //print result
   if (result.isEmpty) {
@@ -40,60 +40,3 @@ object Main extends App {
   }
 
 }
-
-class TransactionRepository(loader: TransactionLoader) {
-  var data: List[Transaction] = loader.load()
-
-  def queryByMerchantAndDateRange(merchant: String, fromDate: LocalDateTime, toDate: LocalDateTime): List[Transaction] = {
-    val reversalRelatedTransactionIds: List[String] = data.filter(_.`type` eq TransactionType.REVERSAL)
-      .map(_.relatedTransactionId)
-      .filter(_.isDefined)
-      .map(_.get)
-
-    data.filter((it: Transaction) => it.merchantName == merchant
-      && it.transactedAt.isAfter(fromDate)
-      && it.transactedAt.isBefore(toDate)
-      && (it.`type` ne TransactionType.REVERSAL)
-      && !reversalRelatedTransactionIds.contains(it.id)
-    )
-  }
-}
-
-class TransactionLoader(source: InputStream) {
-
-  def load(): List[Transaction] = {
-    val reader = Source.fromInputStream(this.source)
-    reader.getLines().drop(1).map(buildTransaction).toList
-  }
-
-  private def buildTransaction(line: String): Transaction = {
-    println("reading line:" + line)
-    val fields: Array[String] = line.split(",")
-    Transaction(
-      fields(0).trim,
-      LocalDateTime.parse(fields(1).trim, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-      BigDecimal(fields(2).trim),
-      fields(3).trim,
-      TransactionType.withName(fields(4).trim),
-      if (fields.length == 6) Some(fields(5).trim) else None
-    )
-  }
-
-}
-
-//AKNBVHMN, 20/08/2020 13:14:11, 10.95, Kwik-E-Mart, REVERSAL, YGXKOEIA
-case class Transaction(
-                        id: String,
-                        transactedAt: LocalDateTime,
-                        amount: BigDecimal,
-                        merchantName: String,
-                        `type`: TransactionType,
-                        relatedTransactionId: Option[String]) {
-}
-
-object TransactionType extends Enumeration {
-  type TransactionType = Value
-  val PAYMENT = Value("PAYMENT")
-  val REVERSAL = Value("REVERSAL")
-}
-
