@@ -1,6 +1,6 @@
 import java.time.LocalDateTime
 
-class TransactionRepository(loader: TransactionLoader) {
+case class TransactionRepository(loader: TransactionLoader) {
   var data: List[Transaction] = loader.load()
 
   def queryByMerchantAndDateRange(merchant: String, fromDate: LocalDateTime, toDate: LocalDateTime): List[Transaction] = {
