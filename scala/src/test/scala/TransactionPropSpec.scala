@@ -29,7 +29,7 @@ class TransactionPropSpec extends AnyPropSpec with TableDrivenPropertyChecks wit
 
   property("transactedAt should happen before the current timestamp") {
     forAll(examples) { transaction =>
-      transaction.transactedAt isBefore(LocalDateTime.now())
+      transaction.transactedAt isBefore (LocalDateTime.now())
     }
   }
 

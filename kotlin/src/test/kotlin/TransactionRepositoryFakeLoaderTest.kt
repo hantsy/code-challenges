@@ -2,8 +2,6 @@ import io.kotest.matchers.shouldBe
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.Arguments
 import org.junit.jupiter.params.provider.MethodSource
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 import java.util.stream.Stream
 
 internal class TransactionRepositoryFakeLoaderTest {
@@ -22,8 +20,8 @@ internal class TransactionRepositoryFakeLoaderTest {
         val transactions = TransactionRepository(loader)
             .queryByMerchantAndDateRange(
                 merchant,
-                LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+                fromDate.toLocalDateTime(),
+                toDate.toLocalDateTime()
             )
         transactions.size shouldBe n
     }

@@ -23,10 +23,10 @@ internal class TransactionTest {
     }
 
     @Test
-    fun `verify the Transaction instance`(){
+    fun `verify the Transaction instance`() {
         instance.id shouldBe "test"
-        instance.transactedAt shouldBeBefore  LocalDateTime.now()
-        instance.amount shouldBeEqualComparingTo   BigDecimal.valueOf(5.0)
+        instance.transactedAt shouldBeBefore LocalDateTime.now()
+        instance.amount shouldBeEqualComparingTo BigDecimal.valueOf(5.0)
         instance.merchantName shouldBe "testMerchant"
         instance.type shouldBe TransactionType.PAYMENT
         instance.relatedTransactionId shouldBe ""

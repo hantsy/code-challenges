@@ -1,5 +1,3 @@
-import TransactionType.TransactionType
-
 import java.io.InputStream
 import java.text.DecimalFormat
 import java.time.LocalDateTime
@@ -16,7 +14,6 @@ object Main extends App {
   val merchant: String = readLine()
   //load file
   val input: InputStream = getClass.getResourceAsStream("input.csv")
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
   //parse and query
   val result: List[Transaction] = TransactionRepository(InputStreamTransactionLoader(input))
     .queryByMerchantAndDateRange(
@@ -24,12 +21,14 @@ object Main extends App {
       LocalDateTime.parse(fromDate, dateTimeFormatter),
       LocalDateTime.parse(toDate, dateTimeFormatter)
     )
+  private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
   //print result
   if (result.isEmpty) {
     println("No transactions found.")
   }
   else {
-    val printTemplate: String ="""
+    val printTemplate: String =
+      """
 Number of transactions = %d
 Average Transaction Value = %s
 """

@@ -1,6 +1,4 @@
 import java.text.DecimalFormat
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 fun main(args: Array<String>) {
     println("fromDate (dd/MM/yyyy HH:mm:ss):")
@@ -13,8 +11,8 @@ fun main(args: Array<String>) {
     val result = TransactionRepository(InputStreamTransactionLoader(input))
         .queryByMerchantAndDateRange(
             merchant!!,
-            LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern(Constants.defaultDateTimeFormatter)),
-            LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern(Constants.defaultDateTimeFormatter))
+            fromDate!!.toLocalDateTime(),
+            toDate!!.toLocalDateTime()
         )
 
     if (result.isEmpty()) {

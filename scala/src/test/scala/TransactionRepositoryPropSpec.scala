@@ -1,10 +1,10 @@
+import org.scalamock.scalatest.MockFactory
 import org.scalatest.matchers.should
 import org.scalatest.prop.TableDrivenPropertyChecks
 import org.scalatest.propspec.AnyPropSpec
 
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import org.scalamock.scalatest.MockFactory
 
 
 class TransactionRepositoryPropSpec extends AnyPropSpec
@@ -12,8 +12,6 @@ class TransactionRepositoryPropSpec extends AnyPropSpec
   with TableDrivenPropertyChecks
   with should.Matchers
   with TransactionFixtures {
-
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
   val examples =
     Table("transactions",
@@ -30,11 +28,12 @@ class TransactionRepositoryPropSpec extends AnyPropSpec
         2
       )
     )
+  private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
 
   property("query against fake loader") {
     val loader = FakeTransactionLoader()
 
-    forAll(examples) { t=>
+    forAll(examples) { t =>
       val (merchant, fromDate, toDate, count) = t
       val result = TransactionRepository(loader)
         .queryByMerchantAndDateRange(merchant,
@@ -51,7 +50,7 @@ class TransactionRepositoryPropSpec extends AnyPropSpec
     val loader = mock[TransactionLoader]
     (loader.load _).expects().returning(transactionData).twice
 
-    forAll(examples) { t=>
+    forAll(examples) { t =>
       val (merchant, fromDate, toDate, count) = t
       val result = TransactionRepository(loader)
         .queryByMerchantAndDateRange(merchant,

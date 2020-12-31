@@ -1,8 +1,6 @@
 # Kotlin
 
-
-
-## Prerequisite 
+## Prerequisite
 
 * Java 11 or Java 15(OpenJDK or AdoptOpenJDK)
 * Apache Maven 3.6.3
@@ -10,7 +8,7 @@
 
 ## Build
 
- Clone the project source codes. 
+Clone the project source codes.
 
 ```bash
 git clone https://github.com/hantsy/transaction-analyser
@@ -18,13 +16,13 @@ git clone https://github.com/hantsy/transaction-analyser
 
 Open your terminal, switch to the project root folder.
 
-Execute the following command to compile the project. 
+Execute the following command to compile the project.
 
 ```bash
 mvn clean compile
 ```
 
-Build and run  the application in a single command.
+Build and run the application in a single command.
 
 ```bash
 mvn clean package exec:java

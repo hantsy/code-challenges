@@ -1,18 +1,14 @@
 import io.kotest.matchers.shouldBe
-import io.mockk.MockKAnnotations
 import io.mockk.confirmVerified
 import io.mockk.every
 import io.mockk.impl.annotations.InjectMockKs
 import io.mockk.impl.annotations.MockK
-import io.mockk.impl.annotations.OverrideMockKs
 import io.mockk.junit5.MockKExtension
 import io.mockk.verify
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
-import org.junit.jupiter.params.provider.Arguments
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.stream.Stream
 
 @ExtendWith(MockKExtension::class)
 internal class TransactionRepositoryAnnotationTest {
@@ -33,8 +29,8 @@ internal class TransactionRepositoryAnnotationTest {
         val transactions = repository
             .queryByMerchantAndDateRange(
                 merchant,
-                LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+                fromDate.toLocalDateTime(),
+                toDate.toLocalDateTime()
             )
         transactions.size shouldBe 1
         verify(exactly = 1) { loader.load() }
