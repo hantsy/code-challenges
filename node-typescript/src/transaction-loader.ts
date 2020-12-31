@@ -1,9 +1,13 @@
 import Big from "big.js";
 import { DateTimeFormatter, LocalDateTime } from "@js-joda/core";
-import { TransactionType } from "./TransactionType";
-import { Transaction } from "./Transaction";
+import { TransactionType } from "./transaction-type.enum";
+import { Transaction } from "./transaction.interface";
 
-export class TransactionLoader {
+export interface TransactionLoader {
+    load(): Transaction[];
+}
+
+export class DefaultTransactionLoader implements TransactionLoader {
     constructor(private file: string) {
     }
 
@@ -23,7 +27,7 @@ export class TransactionLoader {
         return {
             id: fields[0].trim(),
             transactedAt: LocalDateTime.parse(fields[1].trim(), DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-            amout: Big(fields[2].trim()),
+            amount: Big(fields[2].trim()),
             merchantName: fields[3].trim(),
             type: TransactionType[fields[4].trim()],
             relatedTransactionId: fields[5].trim()

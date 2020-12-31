@@ -1,7 +1,7 @@
 import Big from "big.js";
 import { DateTimeFormatter, LocalDateTime } from "@js-joda/core";
-import { TransactionLoader } from "./TransactionLoader";
-import { TransactionRepository } from "./TransactionRepository";
+import { DefaultTransactionLoader } from "./transaction-loader";
+import { TransactionRepository } from "./transaction-repository";
 
 export class App {
     public static run(): void {
@@ -11,7 +11,7 @@ export class App {
         const toDate = readlineSync.question('toDate (dd/MM/yyyy HH:mm:ss):');
         const merchantName = readlineSync.question('merchant:');
 
-        const filterd = new TransactionRepository(new TransactionLoader('./input.csv'))
+        const filterd = new TransactionRepository(new DefaultTransactionLoader('./input.csv'))
             .queryByMerchantAndDateRange(
                 merchantName,
                 LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
@@ -22,7 +22,7 @@ export class App {
         if (filterd.length == 0) {
             console.log("No transactions found.");
         } else {
-            const sum = filterd.reduce((a, c) => a.plus(c.amout), Big(0));
+            const sum = filterd.reduce((a, c) => a.plus(c.amount), Big(0));
             const avg = sum.div(Big(filterd.length));
             console.log('Number of transcations = ' + filterd.length);
             console.log('Total Transaction Value = ' + sum.toFixed(2));

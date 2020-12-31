@@ -1,7 +1,7 @@
 import { LocalDateTime } from "@js-joda/core";
-import { TransactionType } from "./TransactionType";
-import { Transaction } from "./Transaction";
-import { TransactionLoader } from "./TransactionLoader";
+import { TransactionType } from "./transaction-type.enum";
+import { Transaction } from "./transaction.interface";
+import { TransactionLoader } from "./transaction-loader";
 
 export class TransactionRepository {
     private data: Transaction[];
@@ -20,15 +20,15 @@ export class TransactionRepository {
         console.log("From Date:" + fromDate);
         console.log("To Date:" + toDate);
 
-        const reversal = this.data.filter(it => it.type == TransactionType.REVERSAL)
+        const reversalRelatedIds = this.data.filter(it => it.type == TransactionType.REVERSAL)
             .map(t => t.relatedTransactionId);
-        console.log("reversal reatled ids:" + JSON.stringify(reversal));
+        console.log("reversal reatled ids:" + JSON.stringify(reversalRelatedIds));
 
         return this.data.filter(it => it.merchantName == merchant
             && it.transactedAt.isAfter(fromDate)
             && it.transactedAt.isBefore(toDate)
             && it.type == TransactionType.PAYMENT
-            && reversal.findIndex(r => r == it.id) < 0
+            && !reversalRelatedIds.includes(it.id)
         );
     }
 }
