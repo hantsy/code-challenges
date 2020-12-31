@@ -15,7 +15,7 @@ class TransactionFlatSpec extends AnyFlatSpec with BeforeAndAfter {
   )
 
   before {
-      println("before...")
+    println("before...")
   }
 
   after {
@@ -25,7 +25,7 @@ class TransactionFlatSpec extends AnyFlatSpec with BeforeAndAfter {
   "A transaction instance " should " id equals test" in {
     assert {
       transaction.id eq "test"
-      transaction.transactedAt isBefore(LocalDateTime.now())
+      transaction.transactedAt isBefore (LocalDateTime.now())
       transaction.amount eq BigDecimal(5.99)
       transaction.merchantName eq "testMerchant"
       transaction.`type` eq TransactionType.PAYMENT

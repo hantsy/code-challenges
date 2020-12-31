@@ -24,7 +24,7 @@ class TransactionFeatureSpec extends AnyFeatureSpec with GivenWhenThen {
       )
       assert {
         transaction.id eq "test"
-        transaction.transactedAt isBefore(LocalDateTime.now())
+        transaction.transactedAt isBefore (LocalDateTime.now())
         transaction.amount eq BigDecimal(5.99)
         transaction.merchantName eq "testMerchant"
         transaction.`type` eq TransactionType.PAYMENT
@@ -34,11 +34,11 @@ class TransactionFeatureSpec extends AnyFeatureSpec with GivenWhenThen {
         transaction.relatedTransactionId.get
       }
 
-//      When("the power button is pressed")
-//      tv.pressPowerButton()
-//
-//      Then("the TV should switch on")
-//      assert(tv.isOn)
+      //      When("the power button is pressed")
+      //      tv.pressPowerButton()
+      //
+      //      Then("the TV should switch on")
+      //      assert(tv.isOn)
     }
 
   }

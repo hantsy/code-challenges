@@ -3,7 +3,7 @@ import org.scalatest.wordspec.AnyWordSpec
 import java.time.LocalDateTime
 
 class TransactionWordSpec extends AnyWordSpec {
-  val  transaction = Transaction(
+  val transaction = Transaction(
     id = "test",
     transactedAt = LocalDateTime.now(),
     amount = BigDecimal(5.99),
@@ -16,7 +16,7 @@ class TransactionWordSpec extends AnyWordSpec {
       "have size 0" in {
         assert {
           transaction.id eq "test"
-          transaction.transactedAt isBefore(LocalDateTime.now())
+          transaction.transactedAt isBefore (LocalDateTime.now())
           transaction.amount eq BigDecimal(5.99)
           transaction.merchantName eq "testMerchant"
           transaction.`type` eq TransactionType.PAYMENT

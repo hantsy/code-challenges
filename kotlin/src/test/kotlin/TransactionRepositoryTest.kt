@@ -25,8 +25,8 @@ internal class TransactionRepositoryTest {
         val transactions = TransactionRepository(loader)
             .queryByMerchantAndDateRange(
                 merchant,
-                LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
-                LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
+                fromDate.toLocalDateTime(),
+                toDate.toLocalDateTime()
             )
         transactions.size shouldBe n
         verify(exactly = 1) { loader.load() }

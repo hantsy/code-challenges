@@ -1,7 +1,5 @@
 import org.scalatest.funsuite.AnyFunSuite
 
-import java.time.LocalDateTime
-
 class TransactionTypeFunSuite extends AnyFunSuite {
 
 

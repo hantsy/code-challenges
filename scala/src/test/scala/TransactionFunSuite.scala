@@ -16,7 +16,7 @@ class TransactionFunSuite extends AnyFunSuite {
   test("A transaction instance should be verified easily") {
     assert {
       transaction.id eq "test"
-      transaction.transactedAt isBefore(LocalDateTime.now())
+      transaction.transactedAt isBefore (LocalDateTime.now())
       transaction.amount eq BigDecimal(5.99)
       transaction.merchantName eq "testMerchant"
       transaction.`type` eq TransactionType.PAYMENT
