@@ -18,7 +18,7 @@ object Main extends App {
   val input: InputStream = getClass.getResourceAsStream("input.csv")
   private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
   //parse and query
-  val result: List[Transaction] = new TransactionRepository(new TransactionLoader(input))
+  val result: List[Transaction] = TransactionRepository(InputStreamTransactionLoader(input))
     .queryByMerchantAndDateRange(
       merchant,
       LocalDateTime.parse(fromDate, dateTimeFormatter),
@@ -29,14 +29,13 @@ object Main extends App {
     println("No transactions found.")
   }
   else {
-    val printTemplate: String =
-      """
-                    Number of transactions = %d
-                    Average Transaction Value = %s
-                    """
+    val printTemplate: String ="""
+Number of transactions = %d
+Average Transaction Value = %s
+"""
     val sum: BigDecimal = result.map(_.amount).sum
     val avg: BigDecimal = sum / BigDecimal(result.size)
-    println(printTemplate.formatted(result.size, new DecimalFormat("#0.##").format(avg)))
+    println(printTemplate.format(result.size, new DecimalFormat("#0.##").format(avg)))
   }
 
 }

@@ -30,3 +30,6 @@ libraryDependencies += "org.scalatest" %% "scalatest-featurespec" % "3.2.2" % "t
 
 // for RefSpec
 libraryDependencies += "org.scalatest" %% "scalatest-refspec" % "3.2.2" % "test"
+
+// scalaMock
+libraryDependencies += "org.scalamock" %% "scalamock" % "4.4.0" % Test
