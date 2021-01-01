@@ -13,6 +13,8 @@ import (
 	slice "github.com/stretchr/stew/slice"
 )
 
+const customDateTimeLayout = "02/01/2006 15:04:05"
+
 func NewTransactionRepository(loader TransactionLoaderInterface) TransactionRepositoryInterface {
 	return &TransactionRepository{
 		loader: loader,
@@ -22,7 +24,7 @@ func NewTransactionRepository(loader TransactionLoaderInterface) TransactionRepo
 type TransactionRepositoryInterface interface {
 	QueryByMerchantAndDateRange(merchant string,
 		fromDate time.Time,
-		toDate time.Time) []Transaction
+		toDate time.Time) (result []Transaction, err error)
 }
 
 type TransactionRepository struct {
@@ -32,11 +34,11 @@ type TransactionRepository struct {
 func (t TransactionRepository) QueryByMerchantAndDateRange(
 	merchant string,
 	fromDate time.Time,
-	toDate time.Time) []Transaction {
+	toDate time.Time) (result []Transaction, err error) {
 	fmt.Println("calling QueryByMerchantAndDateRange", merchant, fromDate, toDate)
 
 	//load transaction from csv file
-	transactions, _ := t.loader.Load()
+	transactions, err := t.loader.Load()
 	fmt.Println("loaded transactions:", transactions)
 
 	// filtered related transactions
@@ -47,13 +49,12 @@ func (t TransactionRepository) QueryByMerchantAndDateRange(
 		}
 	}
 	fmt.Println("reversal related ids:", relatedIds)
-	var filtered []Transaction
 	for _, value := range transactions {
 		if value.MerchantName == merchant && value.Type == PAYMENT && value.TransactedAt.Before(toDate) && value.TransactedAt.After(fromDate) && !slice.ContainsString(relatedIds, value.Id) {
-			filtered = append(filtered, value)
+			result = append(result, value)
 		}
 	}
-	return filtered
+	return
 }
 
 func NewTransactionLoader(file string) TransactionLoaderInterface {
@@ -71,14 +72,38 @@ type TransactionLoader struct {
 }
 
 func (t TransactionLoader) Load() (result []Transaction, err error) {
-	f, err := os.OpenFile(t.file, os.O_RDONLY, os.ModePerm)
+	lines, _ := readlines(t.file)
+	for _, value := range lines {
+		transaction := buildTransaction(value)
+		result = append(result, transaction)
+	}
+	return
+}
+
+func buildTransaction(value string) Transaction {
+	fields := strings.Split(value, ",")
+
+	transactedAt, _ := time.Parse(customDateTimeLayout, strings.TrimSpace(fields[1]))
+	amount, _, _ := new(big.Float).Parse(strings.TrimSpace(fields[2]), 10)
+	transaction := Transaction{
+		Id:                   strings.TrimSpace(fields[0]),
+		TransactedAt:         transactedAt,
+		Amount:               amount,
+		MerchantName:         strings.TrimSpace(fields[3]),
+		Type:                 TransactionType(strings.TrimSpace(fields[4])),
+		RelatedTransactionId: strings.TrimSpace(fields[5]),
+	}
+	return transaction
+}
+
+//readlines read file content line by line, but skip the header line.
+func readlines(file string) (lines []string, err error) {
+	f, err := os.OpenFile(file, os.O_RDONLY, os.ModePerm)
 	if err != nil {
 		log.Fatalf("open file error: %v", err)
 		return
 	}
 	defer f.Close()
-
-	var lines []string
 	rd := bufio.NewReader(f)
 
 	//skip csv header line.
@@ -101,24 +126,7 @@ func (t TransactionLoader) Load() (result []Transaction, err error) {
 
 		firstline = false
 	}
-
-	var transactions []Transaction
-	for _, value := range lines {
-		fields := strings.Split(value, ",")
-
-		transactedAt, _ := time.Parse("02/01/2006 15:04:05", strings.TrimSpace(fields[1]))
-		amount, _, _ := new(big.Float).Parse(strings.TrimSpace(fields[2]), 10)
-		transaction := Transaction{
-			Id:                   strings.TrimSpace(fields[0]),
-			TransactedAt:         transactedAt,
-			Amount:               amount,
-			MerchantName:         strings.TrimSpace(fields[3]),
-			Type:                 TransactionType(strings.TrimSpace(fields[4])),
-			RelatedTransactionId: strings.TrimSpace(fields[5]),
-		}
-		transactions = append(transactions, transaction)
-	}
-	return transactions, nil
+	return
 }
 
 // https://github.com/golang/go/issues/19814
@@ -155,9 +163,11 @@ func main() {
 
 	//print all input data.
 	fmt.Println("all input data", fromDate, toDate, merchant)
-	parsedFromDate, _ := time.Parse("02/01/2006 15:04:05", fromDate)
-	parsedToDate, _ := time.Parse("02/01/2006 15:04:05", toDate)
-	var filtered = NewTransactionRepository(NewTransactionLoader("./input.csv")).QueryByMerchantAndDateRange(merchant, parsedFromDate, parsedToDate)
+	parsedFromDate, _ := time.Parse(customDateTimeLayout, fromDate)
+	parsedToDate, _ := time.Parse(customDateTimeLayout, toDate)
+	loader := NewTransactionLoader("./input.csv")
+	repository := NewTransactionRepository(loader)
+	filtered, _ := repository.QueryByMerchantAndDateRange(merchant, parsedFromDate, parsedToDate)
 
 	fmt.Println("filtered transactions:", filtered)
 

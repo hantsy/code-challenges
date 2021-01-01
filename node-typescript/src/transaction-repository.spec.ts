@@ -1,7 +1,7 @@
 import { mock } from 'jest-mock-extended';
-import { DefaultTransactionLoader } from "./transaction-loader";
+import { DefaultTransactionLoader } from "./file-transaction-loader";
 import { Transaction } from "./transaction.interface";
-import { TransactionLoader } from "./transaction-loader";
+import { TransactionLoader } from "./transaction-loader.interface";
 import { DateTimeFormatter, LocalDateTime } from '@js-joda/core';
 import { TransactionType } from './transaction-type.enum';
 import Big from 'big.js';

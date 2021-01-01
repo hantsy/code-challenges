@@ -1,4 +1,4 @@
-module github.com/hantsy/transaction-analyser/go
+module github.com/hantsy/code-adventures/transaction-analyser
 
 go 1.15
 
