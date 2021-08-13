@@ -1,15 +1,15 @@
 # Node( Typesctipt)
 
-## Prerequisite 
+## Prerequisite
 
-* NodeJS 14+
+* NodeJS 16+
 
 ## Build
 
-Install dependencies.
+Install NPM dependencies.
 
 ```bash
-npm install 
+npm install
 ```
 
 Build and Run.
@@ -18,3 +18,8 @@ Build and Run.
 npm run start
 ```
 
+Run tests.
+
+```bash
+npm run test
+```
