@@ -17,36 +17,38 @@ updates:
     labels:
       - "dependencies"
       - "maven"
+      
   - package-ecosystem: "maven"
-    # Files stored in `app` directory
     directory: "/java-fn"
     schedule:
       interval: "weekly"
+  
   - package-ecosystem: "maven"
-    # Files stored in `app` directory
+    directory: "/java-ddd"
+    schedule:
+      interval: "weekly"    
+      
+  - package-ecosystem: "maven"
     directory: "/kotlin"
     schedule:
       interval: "weekly"
+      
   - package-ecosystem: "composer"
-    # Files stored in repository root
     directory: "/php"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "npm"
-    # Files stored in `app` directory
     directory: "/node-typescript"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "gomod"
-    # Files stored in `app` directory
     directory: "/go"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "nuget"
-    # Files stored in `app` directory
     directory: "/csharp"
     schedule:
       interval: "weekly"
