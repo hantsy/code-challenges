@@ -2,10 +2,7 @@ import Big from "big.js";
 import { DateTimeFormatter, LocalDateTime } from "@js-joda/core";
 import { TransactionType } from "./transaction-type.enum";
 import { Transaction } from "./transaction.interface";
-
-export interface TransactionLoader {
-    load(): Transaction[];
-}
+import { TransactionLoader } from "./transaction-loader.interface";
 
 export class DefaultTransactionLoader implements TransactionLoader {
     constructor(private file: string) {

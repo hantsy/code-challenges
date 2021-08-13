@@ -1,7 +1,7 @@
 import { LocalDateTime } from "@js-joda/core";
 import { TransactionType } from "./transaction-type.enum";
 import { Transaction } from "./transaction.interface";
-import { TransactionLoader } from "./transaction-loader";
+import { TransactionLoader } from "./transaction-loader.interface";
 
 export class TransactionRepository {
     private data: Transaction[];
