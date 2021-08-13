@@ -1,6 +1,6 @@
-name := "scala"
+name := "scala-transaction-analyzer"
 version := "0.1"
-scalaVersion := "2.13.4"
+scalaVersion := "3.0.1"
 
 libraryDependencies ++= Seq(
   "org.scalactic" %% "scalactic" % "3.2.9",
