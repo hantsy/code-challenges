@@ -1,4 +1,12 @@
-# Code Adventures in ...
+# Code Challenges in ...
+
+In the past years, I am always trying to update myself to the cutting-edge technologies.  I have planed a lot of  learning paths or coding journeys  to archive a new point.  I also tried to participate some programs in Twitter hashtags, such as [#100DaysofCode](https://twitter.com/search?q=%23100DaysOfCode) to track my work.  Finally I found most of them didn't work as expected due to the disturb by the little things in my life. I hope this repository will record some of my learning paths in the future. 
+
+I created this repository not for showing you how to learn something or teaching you some new things. It is just my toys, it is code for fun.  I will not follow the rules of any campaigns, in the other word, I will add the work at my pace and follow my mind,  and there is NO deadlines or limitations like completing a real world project.
+
+
+
+
 
 The *Transaction Analyzer* application is use for loading transaction records from an existing CSV files and generating statistics report after analyzing the loaded data.
 
