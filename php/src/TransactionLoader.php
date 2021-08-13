@@ -25,7 +25,7 @@ class TransactionLoader implements TransactionLoaderInterface
         $handle = fopen($this->csvFile, "r");
 
         $transactions = [];
-        $firstline = true;
+        $firstline = true;//flag to skip header line.
         while ($data = fgetcsv($handle, 1000, ",")) {
             echo "read line:" . implode(", ", $data) . PHP_EOL;
             if (!$firstline) {
