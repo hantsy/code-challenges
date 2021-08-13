@@ -1,7 +1,7 @@
 {
   "name": "transaction-analyzer",
   "version": "1.0.0",
-  "description": "TransactionAnalyzer implemented in NodeJS 14+ and TypeScript",
+  "description": "TransactionAnalyzer implemented in NodeJS 16+ and TypeScript",
   "main": "dist/index.js",
   "scripts": {
     "build": "rimraf ./dist && tsc",
@@ -11,7 +11,7 @@
     "test": "jest"
   },
   "author": "Hantsy Bai <hantsy@gmail.com>",
-  "license": "ISC",
+  "license": "Apache License v2.0",
   "devDependencies": {
     "@types/big.js": "^6.1.1",
     "@types/node": "^16.6.1",
