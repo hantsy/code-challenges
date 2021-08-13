@@ -18,7 +18,7 @@
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <kotlin.version>1.5.21</kotlin.version>
-        <junit-jupiter.version>5.7.0</junit-jupiter.version>
+        <junit-jupiter.version>5.7.2</junit-jupiter.version>
         <mockk.version>1.12.0</mockk.version>
     </properties>
 
