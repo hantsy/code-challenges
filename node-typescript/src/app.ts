@@ -1,6 +1,6 @@
 import Big from "big.js";
 import { DateTimeFormatter, LocalDateTime } from "@js-joda/core";
-import { DefaultTransactionLoader } from "./transaction-loader";
+import { DefaultTransactionLoader } from "./file-transaction-loader";
 import { TransactionRepository } from "./transaction-repository";
 
 export class App {

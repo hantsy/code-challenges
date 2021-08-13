@@ -1,3 +1,3 @@
 import { App } from "./app";
-console.log("Hello Tyepscrpt");
+console.log("Welcome to Transaction Analyzer (Tyepscript)");
 App.run();
