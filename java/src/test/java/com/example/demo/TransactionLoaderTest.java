@@ -1,3 +1,5 @@
+package  com.example.demo;
+import com.example.demo.InputStreamTransactionLoader;
 import org.junit.jupiter.api.DynamicTest;
 import org.junit.jupiter.api.TestFactory;
 
@@ -43,9 +45,9 @@ class TransactionLoaderTest {
     @TestFactory
     List<DynamicTest> testLoadFromFiles() {
         var csvFiles = Map.of(
-                "input_test1.csv", 1,
-                "input_test2.csv", 2,
-                "input_test3.csv", 6
+                "/input_test1.csv", 1,
+                "/input_test2.csv", 2,
+                "/input_test3.csv", 6
         );
 
         return csvFiles.keySet().stream()

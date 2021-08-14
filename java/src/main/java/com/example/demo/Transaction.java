@@ -1,3 +1,7 @@
+package com.example.demo;
+
+import com.example.demo.TransactionType;
+
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 

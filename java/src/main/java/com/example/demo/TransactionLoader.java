@@ -1,3 +1,5 @@
+package com.example.demo;
+
 import java.io.IOException;
 import java.util.List;
 
@@ -6,7 +8,7 @@ interface TransactionLoader {
 }
 
 /*
-class FileTransactionLoader implements TransactionLoader{
+class FileTransactionLoader implements com.example.demo.TransactionLoader{
 
     private final File file;
 
@@ -15,7 +17,7 @@ class FileTransactionLoader implements TransactionLoader{
     }
 
     @Override
-    public List<Transaction> load() throws IOException {
+    public List<com.example.demo.Transaction> load() throws IOException {
         return null;
     }
 }*/

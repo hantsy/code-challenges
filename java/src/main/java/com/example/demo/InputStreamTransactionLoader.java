@@ -1,3 +1,9 @@
+package com.example.demo;
+
+import com.example.demo.Transaction;
+import com.example.demo.TransactionLoader;
+import com.example.demo.TransactionType;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
