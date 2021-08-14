@@ -49,7 +49,7 @@ public class Functions {
                 var reversalRelatedIds = data.stream()
                         .filter(it -> it.type() == TransactionType.REVERSAL)
                         .map(Transaction::relatedTransactionId)
-                        .collect(toList());
+                        .toList();
                 var filteredTransactions = data.stream()
                         .filter(it -> it.merchantName().equals(request.merchantName())
                                 && it.transactedAt().isAfter(request.fromDate())
