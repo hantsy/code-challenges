@@ -1,10 +1,10 @@
 package com.example.demo;
 
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.math.BigDecimal;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Collections;
@@ -12,9 +12,6 @@ import java.util.List;
 import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Supplier;
-
-import static java.util.stream.Collectors.toList;
 
 public class Functions {
 
@@ -32,12 +29,12 @@ public class Functions {
         );
     };
 
-    static Supplier<List<Transaction>> LOAD_TRANSACTIONS = () -> {
-        try {
-            return Files.lines(Paths.get("./input.csv"), StandardCharsets.UTF_8)
-                    .skip(1)// skip first line.
+    static Function<InputStream, List<Transaction>> LOAD_TRANSACTIONS = (InputStream source) -> {
+
+        try (var reader = new BufferedReader(new InputStreamReader(source))) {
+            return reader.lines().skip(1)
                     .map(PARSE_TRANSACTION_LINE)
-                    .collect(toList());
+                    .toList();
         } catch (IOException e) {
             e.printStackTrace();
         }
