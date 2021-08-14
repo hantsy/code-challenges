@@ -19,6 +19,7 @@ public class Main {
         var merchant = scanner.nextLine();
 
         var source = Main.class.getResourceAsStream("/input.csv");
+        var lines = READ_FILE_INTO_LINES.apply(source);
 
         var request = new TransactionAnalysisRequest(
                 LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
@@ -27,8 +28,8 @@ public class Main {
         );
 
         //loading from a local file
-        CompletableFuture.completedFuture(source)
-                .thenApply(LOAD_TRANSACTIONS)
+        CompletableFuture.supplyAsync(() -> lines)
+                .thenApply(TRANSFORM_TO_TRANSACTIONS)
                 // compute the transaction analysis data according to the analysis request input by user
                 // generate readable analysis report
                 .thenCombine(CompletableFuture.completedFuture(request), COMPUTE_TRANSACTION_ANALYSIS)
