@@ -18,7 +18,7 @@ public class Main {
         var merchant = scanner.nextLine();
 
         //load file
-        var input = Main.class.getResourceAsStream("input.csv");
+        var input = Main.class.getResourceAsStream("/input.csv");
 
         //parse and query
         var result = new TransactionRepository(new InputStreamTransactionLoader(input))
