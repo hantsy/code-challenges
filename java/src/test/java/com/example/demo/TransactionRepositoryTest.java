@@ -34,14 +34,17 @@ class TransactionRepositoryTest {
         TransactionLoader mockedLoader;
 
         @InjectMocks
-        TransactionRepository repository;
+        InMemoryTransactionRepository repository;
 
         @Test
         void testQuery_MockLoader() throws IOException {
             String fromDate = "20/08/2020 12:00:00";
             String toDate = "20/08/2020 13:00:00";
             String merchant = "Kwik-E-Mart";
-            given(mockedLoader.load()).willReturn(Fixtures.transactionData());
+
+            //given(mockedLoader.load()).willReturn(Fixtures.transactionData());
+            // injected mocks can not handle the behaviors in the constructor.
+            this.repository.persist(Fixtures.transactionData());
 
             var transactions = this.repository
                     .queryByMerchantAndDateRange(
@@ -66,7 +69,7 @@ class TransactionRepositoryTest {
             var mockedLoader = mock(TransactionLoader.class);
             given(mockedLoader.load()).willReturn(Fixtures.transactionData());
 
-            var transactions = new TransactionRepository(mockedLoader)
+            var transactions = new InMemoryTransactionRepository(mockedLoader)
                     .queryByMerchantAndDateRange(
                             merchant,
                             LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
@@ -95,7 +98,7 @@ class TransactionRepositoryTest {
         @MethodSource("provideQueryCriteria")
         void testQuery_FakeLoader(String fromDate, String toDate, String merchant, int n) {
             var loader = new FakeTransactionLoader();
-            var transactions = new TransactionRepository(loader)
+            var transactions = new InMemoryTransactionRepository(loader)
                     .queryByMerchantAndDateRange(
                             merchant,
                             LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),

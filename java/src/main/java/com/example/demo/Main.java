@@ -1,5 +1,6 @@
 package com.example.demo;
 
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.time.LocalDateTime;
@@ -8,7 +9,7 @@ import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         var scanner = new Scanner(System.in);
         System.out.println("fromDate (dd/MM/yyyy HH:mm:ss):");
         var fromDate = scanner.nextLine();
@@ -17,11 +18,17 @@ public class Main {
         System.out.println("merchant:");
         var merchant = scanner.nextLine();
 
-        //load file
+        // read file as inputStream
         var input = Main.class.getResourceAsStream("/input.csv");
 
-        //parse and query
-        var result = new TransactionRepository(new InputStreamTransactionLoader(input))
+        //parse and load data
+        var loader = new InputStreamTransactionLoader(input);
+
+        // persist the parsed data
+        var transactionRepository = new InMemoryTransactionRepository(loader);
+
+        // perform query
+        var result = transactionRepository
                 .queryByMerchantAndDateRange(
                         merchant,
                         LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
