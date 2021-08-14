@@ -10,6 +10,9 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+             
+        <!-- maven plugins -->
+        <maven.compiler.release>16</maven.compiler.release>
     </properties>
     <build>
         <plugins>
@@ -17,10 +20,6 @@
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
-                <configuration>
-                    <release>15</release>
-                    <compilerArgs>--enable-preview</compilerArgs>
-                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -28,9 +27,6 @@
                 <version>3.0.0</version>
                 <configuration>
                     <mainClass>Main</mainClass>
-                    <arguments>
-                        <argument>--enable-preview</argument>
-                    </arguments>
                 </configuration>
             </plugin>
         </plugins>
