@@ -13,7 +13,7 @@ namespace TransactionAnalyzer.Lib.Tests
         public void Verify_QueryByMerchantAndDateRange(string fromDate, string toDate, string merchant, int n)
         {
             var loader = new FakeTransactionLoader();
-            var transactions = new TransactionRepository(loader)
+            var transactions = new InMemoryTransactionRepository(loader)
                 .QueryByMerchantAndDateRange(
                     merchant,
                     DateTime.ParseExact(fromDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
@@ -32,7 +32,7 @@ namespace TransactionAnalyzer.Lib.Tests
             var mockLoader = new Mock<ITransactionLoader>();
 
             mockLoader.Setup(loader => loader.Load()).Returns(fakeLoadedData);
-            var transactions = new TransactionRepository(mockLoader.Object)
+            var transactions = new InMemoryTransactionRepository(mockLoader.Object)
                 .QueryByMerchantAndDateRange(
                     merchant,
                     DateTime.ParseExact(fromDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,

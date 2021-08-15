@@ -18,7 +18,7 @@ namespace TransactionAnalyzer
             Console.WriteLine("merchant:");
             var merchant = Console.ReadLine();
 
-            var filtered = new TransactionRepository(new TransactionLoader("./input.csv"))
+            var filtered = new InMemoryTransactionRepository(new FileTransactionLoader("./input.csv"))
                 .QueryByMerchantAndDateRange(
                     merchant,
                     DateTime.ParseExact(fromDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
