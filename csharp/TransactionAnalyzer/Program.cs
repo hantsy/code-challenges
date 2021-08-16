@@ -21,9 +21,9 @@ namespace TransactionAnalyzer
             var filtered = new InMemoryTransactionRepository(new FileTransactionLoader("./input.csv"))
                 .QueryByMerchantAndDateRange(
                     merchant,
-                    DateTime.ParseExact(fromDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
+                    DateTime.ParseExact(fromDate!, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
                         DateTimeStyles.None),
-                    DateTime.ParseExact(toDate, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
+                    DateTime.ParseExact(toDate!, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
                         DateTimeStyles.None)
                 );
             if (filtered.Length == 0)
