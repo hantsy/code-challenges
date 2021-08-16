@@ -1,7 +1,4 @@
-﻿using System;
-using System.Globalization;
-
-namespace TransactionAnalyzer.Lib.Tests
+﻿namespace TransactionAnalyzer.Lib.Tests
 {
     internal partial class FakeTransactionLoader : ITransactionLoader
     {

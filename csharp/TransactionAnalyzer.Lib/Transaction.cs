@@ -5,10 +5,10 @@ namespace TransactionAnalyzer.Lib
 {
     public record Transaction
     {
-        public string Id { get; init; }
+        public string Id { get; init; } = null!;
         public DateTime TransactedAt { get; init; }
         public decimal Amount { get; init; }
-        public string MerchantName { get; init; }
+        public string MerchantName { get; init; } = null!;
         public TransactionType Type { get; init; }
         public string? RelatedTransactionId { get; init; }
 
