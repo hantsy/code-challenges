@@ -22,7 +22,7 @@ jobs:
 #         distribution: 'adopt'
 
     - name: Setup Java and Scala
-      uses: olafurpg/setup-scala@v10
+      uses: olafurpg/setup-scala@v13
       with:
         java-version: "adopt@1.16.0-1"
 
