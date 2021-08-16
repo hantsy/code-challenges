@@ -129,7 +129,7 @@ func readlines(file string) (lines []string, err error) {
 	return
 }
 
-// https://github.com/golang/go/issues/19814
+// TransactionType see: https://github.com/golang/go/issues/19814
 type TransactionType string
 
 const (
@@ -182,5 +182,8 @@ func main() {
 		fmt.Printf("Number of tranactions:%d \n", ln)
 		fmt.Printf("Total transaction value is:%.2f \n", sum)
 		fmt.Printf("Average transaction value is:%.2f \n", avg)
+	} else {
+		fmt.Println("No Transactions found.")
 	}
+
 }
