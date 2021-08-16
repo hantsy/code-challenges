@@ -12,13 +12,13 @@ The *Transaction Analyzer* application is use for loading transaction records fr
 
 ## Requirements
 
-Given a CSV file contains some transaction records  from a financial system, design an application to analyze the data in the CSV file and generate a statistics report.
+Given a CSV file contains some transaction records from a financial system, design an application to analyze the data in the CSV file and generate a statistics report.
 
 When analyzing the records, the `REVERSAL` transaction and it related transaction should be excluded.
 
-Assume there is an CSV example file contains the following transactions.
+Assume there is a CSV example file contains the following transactions.
 
-```csv
+```csv 
 ID, Date, Amount, Merchant, Type, Related Transaction
 WLMFRDGD, 20/08/2020 12:45:33, 59.99, Kwik-E-Mart, PAYMENT,
 YGXKOEIA, 20/08/2020 12:46:17, 10.95, Kwik-E-Mart, PAYMENT,
@@ -28,7 +28,7 @@ AKNBVHMN, 20/08/2020 13:14:11, 10.95, Kwik-E-Mart, REVERSAL, YGXKOEIA
 JYAPKZFZ, 20/08/2020 14:07:10, 99.50, MacLaren, PAYMENT,
 ```
 
- When user input the following arguments as query criteria.
+When user input the following arguments as query criteria.
 
 ```bash
 fromDate: 20/08/2020 12:00:00
@@ -43,23 +43,29 @@ Number of transactions = 1
 Average Transaction Value = 59.99
 ```
 
+If no transaction record found, print the following message instead.
 
+```bash
+No transactions found.
+```
 
-## Implementations
+## Implementation Examples
 
-To make things simpler,  I didn't use any third party library to parse the CSV file, and also didn't  adopt a database to store the parsed data from CSV, all the analyzing work is done in memory.
+To make things simpler, I tried to avoid to use any third party library to parse the CSV file, and also didn't adopt a database to store the parsed data from CSV, all the analyzing work is done in memory.
 
-As as  a toy for myself, I've created a collection of implementations written in different languages and techniques.
+As as a toy for myself, I've created a collection of implementations written in different languages and techniques.
 
-* [Java](./java)
-* [Java with DDD/Onion/Hexagon Architecture](./java-ddd) (*Working in progress*)
-* [Java Functional Programming(Function, Supplier, Consumer, CompletableFuture)](./java-fn)
-* [Kotlin](./kotlin) 
-* [Scala](./scala) 
-* [PHP](./php) 
-* [C#](./csharp) 
-* [Node(Typescript)](./node-typescript) 
-* [Go](./go) 
+| Example | Description|
+|---|---|
+|[java](./java)| Java examples|
+|[java-ddd](./java-ddd) (*Working in progress*)|Java with DDD/Onion/Hexagon Architecture|
+|[java-fn](./java-fn)|Java Functional Programming(Function, Supplier, Consumer, CompletableFuture)|
+|[kotlin](./kotlin) | Kotlin |
+|[scala](./scala) | Scala | 
+|[php](./php) | PHP |
+|[csharp](./csharp) | C# |
+|[node-typescript](./node-typescript)|Node(Typescript)| 
+|[go](./go) | Go |
 
 ## More ...
 
