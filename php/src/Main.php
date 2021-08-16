@@ -19,10 +19,10 @@ class Main
         $file = __DIR__ . "/input.csv";
 
         // loading data.
-        $loader = new TransactionLoader($file);
+        $loader = new FileTransactionLoader($file);
 
         //define repository
-        $repository = new TransactionRepository($loader);
+        $repository = new InMemoryTransactionRepository($loader);
 
         //query result
         $filteredTransactions = $repository->queryByMerchantAndDateRange(

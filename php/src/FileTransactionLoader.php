@@ -6,7 +6,7 @@ use Brick\DateTime\LocalDateTime;
 use Brick\Math\BigDecimal;
 use DateTime;
 
-class TransactionLoader implements TransactionLoaderInterface
+class FileTransactionLoader implements TransactionLoaderInterface
 {
 
     private string $csvFile;

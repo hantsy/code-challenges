@@ -7,7 +7,7 @@ namespace TransactionAnalyser;
 use Brick\DateTime\LocalDateTime;
 use DateTime;
 
-class TransactionRepository
+class InMemoryTransactionRepository implements TransactionRepositoryInterface
 {
     /**
      * @var TransactionLoaderInterface

@@ -4,17 +4,16 @@ namespace TransactionAnalyser\Tests;
 
 use Brick\DateTime\LocalDateTime;
 use DateTime;
-use TransactionAnalyser\TransactionLoader;
 use PHPUnit\Framework\TestCase;
+use TransactionAnalyser\InMemoryTransactionRepository;
 use TransactionAnalyser\TransactionLoaderInterface;
-use TransactionAnalyser\TransactionRepository;
 
 class TransactionRepositoryTest extends TestCase
 {
     public function testTransactionRepositoryAgainstFakeLoader()
     {
         $loader = new FakeTransactionLoader();
-        $repository = new TransactionRepository($loader);
+        $repository = new InMemoryTransactionRepository($loader);
         $transactions = $repository->queryByMerchantAndDateRange(
             "Kwik-E-Mart",
             LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 12:00:00")),
@@ -29,7 +28,7 @@ class TransactionRepositoryTest extends TestCase
         $stub = $this->createMock(TransactionLoaderInterface::class);
         $stub->method("load")->willReturn(Fixtures::transactionData());
 
-        $repository = new TransactionRepository($stub);
+        $repository = new InMemoryTransactionRepository($stub);
         $transactions = $repository->queryByMerchantAndDateRange(
             "Kwik-E-Mart",
             LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 12:00:00")),
