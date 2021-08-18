@@ -28,7 +28,7 @@
   },
   "dependencies": {
     "@js-joda/core": "^3.2.0",
-    "big.js": "^6.0.3",
+    "big.js": "^6.1.1",
     "readline-sync": "^1.4.10"
   },
   "keywords": []
