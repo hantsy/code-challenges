@@ -38,3 +38,4 @@ obj
 bin
 .vs
 build
+.phpunit.result.cache
