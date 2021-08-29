@@ -6,6 +6,8 @@ on:
       - "csharp/**"
     branches: [ master ]
   pull_request:
+    paths:
+      - "csharp/**"
     branches: [ master ]
 
 jobs:
