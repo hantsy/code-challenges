@@ -1,8 +1,6 @@
 <?php
 
-
 namespace TransactionAnalyser\Tests;
-
 
 use Brick\DateTime\LocalDateTime;
 use Brick\Math\BigDecimal;

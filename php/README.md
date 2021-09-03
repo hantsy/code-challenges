@@ -7,7 +7,7 @@
 
 ## Run
 
-Install dependecies.
+Install dependencies.
 
 ```bash
 composer install
