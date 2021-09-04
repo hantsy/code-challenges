@@ -15,23 +15,23 @@ import (
 
 const customDateTimeLayout = "02/01/2006 15:04:05"
 
-func NewTransactionRepository(loader TransactionLoaderInterface) TransactionRepositoryInterface {
-	return &TransactionRepository{
+func NewTransactionRepository(loader TransactionLoader) TransactionRepository {
+	return &DefaultTransactionRepository{
 		loader: loader,
 	}
 }
 
-type TransactionRepositoryInterface interface {
+type TransactionRepository interface {
 	QueryByMerchantAndDateRange(merchant string,
 		fromDate time.Time,
 		toDate time.Time) (result []Transaction, err error)
 }
 
-type TransactionRepository struct {
-	loader TransactionLoaderInterface
+type DefaultTransactionRepository struct {
+	loader TransactionLoader
 }
 
-func (t TransactionRepository) QueryByMerchantAndDateRange(
+func (t DefaultTransactionRepository) QueryByMerchantAndDateRange(
 	merchant string,
 	fromDate time.Time,
 	toDate time.Time) (result []Transaction, err error) {
@@ -57,21 +57,21 @@ func (t TransactionRepository) QueryByMerchantAndDateRange(
 	return
 }
 
-func NewTransactionLoader(file string) TransactionLoaderInterface {
-	return &TransactionLoader{
+func NewTransactionLoader(file string) TransactionLoader {
+	return &DefaultTransactionLoader{
 		file: file,
 	}
 }
 
-type TransactionLoaderInterface interface {
+type TransactionLoader interface {
 	Load() (result []Transaction, err error)
 }
 
-type TransactionLoader struct {
+type DefaultTransactionLoader struct {
 	file string
 }
 
-func (t TransactionLoader) Load() (result []Transaction, err error) {
+func (t DefaultTransactionLoader) Load() (result []Transaction, err error) {
 	lines, _ := readlines(t.file)
 	for _, value := range lines {
 		transaction := buildTransaction(value)
