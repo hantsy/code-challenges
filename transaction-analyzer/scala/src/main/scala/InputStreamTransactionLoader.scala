@@ -16,7 +16,7 @@ case class InputStreamTransactionLoader(source: InputStream) extends Transaction
     val fields: Array[String] = line.split(",")
     Transaction(
       fields(0).trim,
-      LocalDateTime.parse(fields(1).trim, DateTimeFormatter.ofPattern(defaultDatetimePattern)),
+      LocalDateTime.parse(fields(1).trim, Constants.dateTimeFormatter),
       BigDecimal(fields(2).trim),
       fields(3).trim,
       TransactionType.withName(fields(4).trim),

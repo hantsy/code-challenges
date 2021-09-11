@@ -28,14 +28,14 @@ class TransactionRepositoryPropSpec extends AnyPropSpec
         2
       )
     )
-  private val dateTimeFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")
+  private val dateTimeFormatter = Constants.dateTimeFormatter
 
   property("query against fake loader") {
     val loader = FakeTransactionLoader()
 
     forAll(examples) { t =>
       val (merchant, fromDate, toDate, count) = t
-      val result = TransactionRepository(loader)
+      val result = InMemoryTransactionRepository(loader)
         .queryByMerchantAndDateRange(merchant,
           LocalDateTime.parse(fromDate, dateTimeFormatter),
           LocalDateTime.parse(toDate, dateTimeFormatter)
@@ -52,7 +52,7 @@ class TransactionRepositoryPropSpec extends AnyPropSpec
 
     forAll(examples) { t =>
       val (merchant, fromDate, toDate, count) = t
-      val result = TransactionRepository(loader)
+      val result = InMemoryTransactionRepository(loader)
         .queryByMerchantAndDateRange(merchant,
           LocalDateTime.parse(fromDate, dateTimeFormatter),
           LocalDateTime.parse(toDate, dateTimeFormatter)
