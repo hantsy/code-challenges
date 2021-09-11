@@ -23,13 +23,13 @@ jobs:
         dotnet-version: 5.0.x
     - name: Restore dependencies
       run: |
-        cd csharp
+        cd transaction-analyzer/csharp
         dotnet restore
     - name: Build
       run: |
-        cd csharp
+        cd transaction-analyzer/csharp
         dotnet build --no-restore
     - name: Test
       run: |
-        cd csharp
+        cd transaction-analyzer/csharp
         dotnet test --no-build --verbosity normal

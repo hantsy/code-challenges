@@ -27,5 +27,5 @@ jobs:
         distribution: 'adopt'
     - name: Build with Maven
       run: |
-        cd java
+        cd transaction-analyzer/java
         mvn -B package --file pom.xml

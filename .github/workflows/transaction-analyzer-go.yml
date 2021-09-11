@@ -24,10 +24,10 @@ jobs:
 
     - name: Build
       run: |
-        cd go
+        cd transaction-analyzer/go
         go build -v ./...
 
     - name: Test
       run: |
-        cd go
+        cd transaction-analyzer/go
         go test -v ./...

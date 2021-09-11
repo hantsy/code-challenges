@@ -34,7 +34,7 @@ jobs:
 
     - name: Install dependencies
       run: |
-        cd php
+        cd transaction-analyzer/php
         composer install --prefer-dist --no-progress
 
     # Add a test script to composer.json, for instance: "test": "vendor/bin/phpunit"
@@ -42,5 +42,5 @@ jobs:
 
     - name: Run test suite
       run: |
-        cd php
+        cd transaction-analyzer/php
         composer run-script test
