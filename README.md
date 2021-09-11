@@ -58,15 +58,15 @@ As as a toy for myself, I've created a collection of implementations written in 
 
 | Example | Description|
 |---|---|
-|[java](./java)| Java examples|
-|[java-ddd](./java-ddd) (*Working in progress*)|Java with DDD/Onion/Hexagon Architecture|
-|[java-fn](./java-fn)|Java Functional Programming(Function, Supplier, Consumer, CompletableFuture)|
-|[kotlin](./kotlin) | Kotlin |
-|[scala](./scala) | Scala | 
-|[php](./php) | PHP |
-|[csharp](./csharp) | C# |
-|[node-typescript](./node-typescript)|Node(Typescript)| 
-|[go](./go) | Go |
+|[java](./transaction-analyzer/java)| Java examples|
+|[java-ddd](./transaction-analyzer/java-ddd) (*Working in progress*)|Java with DDD/Onion/Hexagon Architecture|
+|[java-fn](./transaction-analyzer/java-fn)|Java Functional Programming(Function, Supplier, Consumer, CompletableFuture)|
+|[kotlin](./transaction-analyzer/kotlin) | Kotlin |
+|[scala](./transaction-analyzer/scala) | Scala | 
+|[php](./transaction-analyzer/php) | PHP |
+|[csharp](./transaction-analyzer/csharp) | C# |
+|[node-typescript](./transaction-analyzer/node-typescript/)|Node(Typescript)| 
+|[go](./transaction-analyzer/go) | Go |
 
 ## More ...
 
