@@ -1,16 +1,17 @@
 # Code Challenges in ...
 
-In the past years, I am always trying to update myself to the cutting-edge technologies.  I have planed a lot of  learning paths or coding journeys  to archive a new point.  I also tried to participate some programs in Twitter hashtags, such as [#100DaysofCode](https://twitter.com/search?q=%23100DaysOfCode) to track my work.  Finally I found most of them didn't work as expected due to the disturb by the little things in my life. I hope this repository will record some of my learning paths in the future. 
+In the past years, I am always trying to update myself to the cutting-edge technologies. I defined a lot of learning paths or coding journeys to archive the purpose.  I also tried to participate into some programs in Twitter hashtags, such as [#100DaysofCode](https://twitter.com/search?q=%23100DaysOfCode) to track my work.  Finally I found most of them didn't work as expected due to the progress disturbed by some uncertain things in my life. 
 
-I created this repository not for showing you how to learn something or teaching you some new things. It is just my toys, it is code for fun.  I will not follow the rules of any campaigns, in the other word, I will add the work at my pace and follow my mind,  and there is NO deadlines or limitations like completing a real world project.
+Personally I hope this repository will record some of my learning results in the future. 
+
+This repository is not for showing you how to learn something or teaching you some new things. It is just my toys, it is truely coding for fun.  I will not follow the rules of any campaigns. In another words, I will add the work at my pace. There is no deadlines or limitations like delivering a real world project.
 
 
-
-
+## Transaction Analyzer
 
 The *Transaction Analyzer* application is use for loading transaction records from an existing CSV files and generating statistics report after analyzing the loaded data.
 
-## Requirements
+### Requirements
 
 Given a CSV file contains some transaction records from a financial system, design an application to analyze the data in the CSV file and generate a statistics report.
 
@@ -49,7 +50,7 @@ If no transaction record found, print the following message instead.
 No transactions found.
 ```
 
-## Implementation Examples
+### My implemenation Examples
 
 To make things simpler, I tried to avoid to use any third party library to parse the CSV file, and also didn't adopt a database to store the parsed data from CSV, all the analyzing work is done in memory.
 
