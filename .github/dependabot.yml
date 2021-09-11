@@ -6,7 +6,7 @@ updates:
       interval: "weekly"
       
   - package-ecosystem: maven
-    directory: "/java"
+    directory: "/transaction-analyzer/java"
     schedule:
       interval: weekly
     open-pull-requests-limit: 10
@@ -19,36 +19,36 @@ updates:
       - "maven"
       
   - package-ecosystem: "maven"
-    directory: "/java-fn"
+    directory: "/transaction-analyzer/java-fn"
     schedule:
       interval: "weekly"
   
   - package-ecosystem: "maven"
-    directory: "/java-ddd"
+    directory: "/transaction-analyzer/java-ddd"
     schedule:
       interval: "weekly"    
       
   - package-ecosystem: "maven"
-    directory: "/kotlin"
+    directory: "/transaction-analyzer/kotlin"
     schedule:
       interval: "weekly"
       
   - package-ecosystem: "composer"
-    directory: "/php"
+    directory: "/transaction-analyzer/php"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "npm"
-    directory: "/node-typescript"
+    directory: "/transaction-analyzer/node-typescript"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "gomod"
-    directory: "/go"
+    directory: "/transaction-analyzer/go"
     schedule:
       interval: "weekly"
 
   - package-ecosystem: "nuget"
-    directory: "/csharp"
+    directory: "/transaction-analyzer/csharp"
     schedule:
       interval: "weekly"
