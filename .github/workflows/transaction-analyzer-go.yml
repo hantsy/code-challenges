@@ -1,0 +1,33 @@
+name: Go
+
+on:
+  push:
+    paths:
+      - "transaction-analyzer/go/**"
+    branches: [ master ]
+  pull_request:
+    paths:
+      - "transaction-analyzer/go/**"
+    branches: [ master ]
+
+jobs:
+
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set up Go
+      uses: actions/setup-go@v2
+      with:
+        go-version: 1.16
+
+    - name: Build
+      run: |
+        cd go
+        go build -v ./...
+
+    - name: Test
+      run: |
+        cd go
+        go test -v ./...
