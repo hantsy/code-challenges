@@ -15,10 +15,10 @@ class FunctionsTest {
     }
 
     @Test
-    public void testTransactionLineParsing() {
+    public void testParseTransactionLine() {
         var line = "WLMFRDGD, 20/08/2020 12:45:33, 59.99, Kwik-E-Mart, PAYMENT,";
 
-        var result = Functions.PARSE_TRANSACTION_LINE.apply(line);
+        var result = TransactionAnalysisApplication.Functions.parseTransactionLine.apply(line);
 
         assertThat(result.id()).isEqualTo("WLMFRDGD");
         assertThat(result.merchantName()).isEqualTo("Kwik-E-Mart");
