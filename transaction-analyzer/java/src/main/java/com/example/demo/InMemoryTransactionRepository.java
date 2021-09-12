@@ -1,28 +1,17 @@
 package com.example.demo;
 
-import com.example.demo.TransactionType;
-
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+
 class InMemoryTransactionRepository implements TransactionRepository {
 
-    private List<Transaction> data;
+    private  final TransactionLoader loader;
 
-    public InMemoryTransactionRepository(TransactionLoader loader) {
-        try {
-            this.data = loader.load();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    public void persist(List<Transaction> data) {
-        this.data = data;
+    InMemoryTransactionRepository(TransactionLoader loader) {
+        this.loader = loader;
     }
 
     @Override
@@ -30,7 +19,8 @@ class InMemoryTransactionRepository implements TransactionRepository {
             String merchant,
             LocalDateTime fromDate,
             LocalDateTime toDate
-    ) {
+    ) throws IOException {
+        var data = loader.load();
         var reversal = data.stream()
                 .filter(it -> it.type() == TransactionType.REVERSAL)
                 .map(Transaction::relatedTransactionId)

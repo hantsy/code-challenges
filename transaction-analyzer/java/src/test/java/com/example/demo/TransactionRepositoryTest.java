@@ -42,9 +42,8 @@ class TransactionRepositoryTest {
             String toDate = "20/08/2020 13:00:00";
             String merchant = "Kwik-E-Mart";
 
-            //given(mockedLoader.load()).willReturn(Fixtures.transactionData());
-            // injected mocks can not handle the behaviors in the constructor.
-            this.repository.persist(Fixtures.transactionData());
+            given(mockedLoader.load()).willReturn(Fixtures.transactionData());
+            //this.repository.persist(Fixtures.transactionData());
 
             var transactions = this.repository
                     .queryByMerchantAndDateRange(
@@ -96,7 +95,7 @@ class TransactionRepositoryTest {
 
         @ParameterizedTest
         @MethodSource("provideQueryCriteria")
-        void testQuery_FakeLoader(String fromDate, String toDate, String merchant, int n) {
+        void testQuery_FakeLoader(String fromDate, String toDate, String merchant, int n) throws IOException {
             var loader = new FakeTransactionLoader();
             var transactions = new InMemoryTransactionRepository(loader)
                     .queryByMerchantAndDateRange(

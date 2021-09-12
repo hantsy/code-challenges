@@ -39,3 +39,4 @@ bin
 .vs
 build
 .phpunit.result.cache
+/transaction-analyzer/scala/null
