@@ -10,13 +10,13 @@ import (
 	"strings"
 	"time"
 
-	slice "github.com/stretchr/stew/slice"
+	"github.com/stretchr/stew/slice"
 )
 
 const customDateTimeLayout = "02/01/2006 15:04:05"
 
 func NewTransactionRepository(loader TransactionLoader) TransactionRepository {
-	return &DefaultTransactionRepository{
+	return &InMemoryTransactionRepository{
 		loader: loader,
 	}
 }
@@ -27,11 +27,11 @@ type TransactionRepository interface {
 		toDate time.Time) (result []Transaction, err error)
 }
 
-type DefaultTransactionRepository struct {
+type InMemoryTransactionRepository struct {
 	loader TransactionLoader
 }
 
-func (t DefaultTransactionRepository) QueryByMerchantAndDateRange(
+func (t InMemoryTransactionRepository) QueryByMerchantAndDateRange(
 	merchant string,
 	fromDate time.Time,
 	toDate time.Time) (result []Transaction, err error) {
@@ -50,7 +50,11 @@ func (t DefaultTransactionRepository) QueryByMerchantAndDateRange(
 	}
 	fmt.Println("reversal related ids:", relatedIds)
 	for _, value := range transactions {
-		if value.MerchantName == merchant && value.Type == PAYMENT && value.TransactedAt.Before(toDate) && value.TransactedAt.After(fromDate) && !slice.ContainsString(relatedIds, value.Id) {
+		if value.MerchantName == merchant &&
+			value.Type == PAYMENT &&
+			value.TransactedAt.Before(toDate) &&
+			value.TransactedAt.After(fromDate) &&
+			!slice.ContainsString(relatedIds, value.Id) {
 			result = append(result, value)
 		}
 	}
@@ -58,7 +62,7 @@ func (t DefaultTransactionRepository) QueryByMerchantAndDateRange(
 }
 
 func NewTransactionLoader(file string) TransactionLoader {
-	return &DefaultTransactionLoader{
+	return &FileTransactionLoader{
 		file: file,
 	}
 }
@@ -67,11 +71,11 @@ type TransactionLoader interface {
 	Load() (result []Transaction, err error)
 }
 
-type DefaultTransactionLoader struct {
+type FileTransactionLoader struct {
 	file string
 }
 
-func (t DefaultTransactionLoader) Load() (result []Transaction, err error) {
+func (t FileTransactionLoader) Load() (result []Transaction, err error) {
 	lines, _ := readlines(t.file)
 	for _, value := range lines {
 		transaction := buildTransaction(value)
@@ -107,7 +111,7 @@ func readlines(file string) (lines []string, err error) {
 	rd := bufio.NewReader(f)
 
 	//skip csv header line.
-	firstline := true
+	isFirstLine := true
 	for {
 		line, err := rd.ReadString('\n')
 		if err != nil {
@@ -119,12 +123,12 @@ func readlines(file string) (lines []string, err error) {
 			return nil, err
 		}
 
-		if firstline == false {
+		if isFirstLine == false {
 			str := strings.TrimSpace(line)
 			lines = append(lines, str)
 		}
 
-		firstline = false
+		isFirstLine = false
 	}
 	return
 }
@@ -157,7 +161,7 @@ func main() {
 	fmt.Println("toDate (dd/MM/yyyy HH:mm:ss):")
 	scanner.Scan()
 	toDate := scanner.Text()
-	fmt.Println("merchant")
+	fmt.Println("merchant:")
 	scanner.Scan()
 	merchant := scanner.Text()
 
