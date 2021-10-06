@@ -20,7 +20,7 @@ jobs:
 
     - name: Validate composer.json and composer.lock
       run: |
-        cd php
+        cd transaction-analyzer/php
         composer validate --strict
 
     - name: Cache Composer packages
