@@ -19,7 +19,7 @@
         <maven-failsafe-plugin.version>3.0.0-M5</maven-failsafe-plugin.version>
         <kotlin.version>1.6.0</kotlin.version>
         <junit-jupiter.version>5.8.1</junit-jupiter.version>
-        <mockk.version>1.12.0</mockk.version>
+        <mockk.version>1.12.1</mockk.version>
     </properties>
 
     <dependencies>
