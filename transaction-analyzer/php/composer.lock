@@ -4,30 +4,30 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "ef0136db1b619c98d14245ad0839b6da",
+    "content-hash": "6b63cfeacf67349aef5632923e5fccda",
     "packages": [
         {
             "name": "brick/date-time",
-            "version": "0.3.2",
+            "version": "0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/date-time.git",
-                "reference": "b4e45bf9dc37f03a12c41b5446474a07c5fc7f39"
+                "reference": "2d3e3cd221154615eff20f6182537bd36f566c3c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/date-time/zipball/b4e45bf9dc37f03a12c41b5446474a07c5fc7f39",
-                "reference": "b4e45bf9dc37f03a12c41b5446474a07c5fc7f39",
+                "url": "https://api.github.com/repos/brick/date-time/zipball/2d3e3cd221154615eff20f6182537bd36f566c3c",
+                "reference": "2d3e3cd221154615eff20f6182537bd36f566c3c",
                 "shasum": ""
             },
             "require": {
                 "ext-json": "*",
-                "php": "^7.1 || ^8.0"
+                "php": "^7.4 || ^8.0"
             },
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^7.5.15 || ^8.0 || ^9.0",
-                "vimeo/psalm": "4.4.1"
+                "phpunit/phpunit": "^9.0",
+                "vimeo/psalm": "4.15.0"
             },
             "suggest": {
                 "ext-timezonedb": "This PECL extension provides up-to-date timezone information"
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/date-time/issues",
-                "source": "https://github.com/brick/date-time/tree/0.3.2"
+                "source": "https://github.com/brick/date-time/tree/0.4.0"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2021-06-30T17:11:38+00:00"
+            "time": "2021-12-23T00:03:39+00:00"
         },
         {
             "name": "brick/math",
