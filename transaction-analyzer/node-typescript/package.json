@@ -14,7 +14,7 @@
   "license": "Apache License v2.0",
   "devDependencies": {
     "@types/big.js": "^6.1.2",
-    "@types/jest": "^27.0.3",
+    "@types/jest": "^27.4.0",
     "@types/node": "^17.0.5",
     "jest": "^27.4.5",
     "jest-mock-extended": "^2.0.4",
