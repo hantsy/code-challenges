@@ -18,13 +18,15 @@ namespace TransactionAnalyzer
             Console.WriteLine("merchant:");
             var merchant = Console.ReadLine();
 
+            var fromDateTime = DateTime.ParseExact(fromDate!, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
+                DateTimeStyles.None);
+            var toDateTime = DateTime.ParseExact(toDate!, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
+                DateTimeStyles.None);
             var filtered = new InMemoryTransactionRepository(new FileTransactionLoader("./input.csv"))
                 .QueryByMerchantAndDateRange(
                     merchant,
-                    DateTime.ParseExact(fromDate!, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
-                        DateTimeStyles.None),
-                    DateTime.ParseExact(toDate!, "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
-                        DateTimeStyles.None)
+                    fromDateTime,
+                    toDateTime
                 );
             if (filtered.Length == 0)
             {
