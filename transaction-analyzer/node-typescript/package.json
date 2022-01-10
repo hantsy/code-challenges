@@ -16,7 +16,7 @@
     "@types/big.js": "^6.1.2",
     "@types/jest": "^27.4.0",
     "@types/node": "^17.0.8",
-    "jest": "^27.4.5",
+    "jest": "^27.4.7",
     "jest-mock-extended": "^2.0.4",
     "moq.ts": "^7.3.4",
     "nodemon": "^2.0.15",
