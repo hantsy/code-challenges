@@ -29,7 +29,7 @@ jobs:
         java-version: "adopt@1.16.0-1"
 
     - name: Cache sbt
-      uses: actions/cache@v2.1.7
+      uses: actions/cache@v3
       with:
         path: |
           ~/.sbt
