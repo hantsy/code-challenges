@@ -17,7 +17,7 @@
         <kotlin.compiler.jvmTarget>16</kotlin.compiler.jvmTarget>
         <maven-surefire-plugin.version>3.0.0-M5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M6</maven-failsafe-plugin.version>
-        <kotlin.version>1.6.10</kotlin.version>
+        <kotlin.version>1.6.20</kotlin.version>
         <junit-jupiter.version>5.8.2</junit-jupiter.version>
         <mockk.version>1.12.3</mockk.version>
     </properties>
