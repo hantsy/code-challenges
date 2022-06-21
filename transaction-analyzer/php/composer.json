@@ -5,7 +5,7 @@
   "require": {
     "php": "^8.0",
     "myclabs/php-enum": "^1.7",
-    "brick/math": "^0.9.1",
+    "brick/math": "^0.10.0",
     "brick/date-time": "^0.4.0",
     "ext-readline": "*"
   },
