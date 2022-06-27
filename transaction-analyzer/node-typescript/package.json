@@ -19,7 +19,7 @@
     "jest": "^27.5.1",
     "jest-mock-extended": "^2.0.6",
     "moq.ts": "^9.0.2",
-    "nodemon": "^2.0.16",
+    "nodemon": "^2.0.18",
     "rimraf": "^3.0.2",
     "ts-jest": "^27.1.4",
     "ts-mockito": "^2.6.1",
