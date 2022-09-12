@@ -16,8 +16,8 @@ class TransactionRepositoryTest extends TestCase
         $repository = new InMemoryTransactionRepository($loader);
         $transactions = $repository->queryByMerchantAndDateRange(
             "Kwik-E-Mart",
-            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 12:00:00")),
-            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 13:00:00"))
+            LocalDateTime::fromNativeDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 12:00:00")),
+            LocalDateTime::fromNativeDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 13:00:00"))
         );
 
         $this->assertEquals(1, sizeof($transactions));
@@ -31,8 +31,8 @@ class TransactionRepositoryTest extends TestCase
         $repository = new InMemoryTransactionRepository($stub);
         $transactions = $repository->queryByMerchantAndDateRange(
             "Kwik-E-Mart",
-            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 12:00:00")),
-            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 13:00:00"))
+            LocalDateTime::fromNativeDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 12:00:00")),
+            LocalDateTime::fromNativeDateTime(DateTime::createFromFormat('d/m/Y H:i:s', "20/08/2020 13:00:00"))
         );
         $this->assertEquals(1, sizeof($transactions));
     }

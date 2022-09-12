@@ -32,7 +32,7 @@ class InMemoryTransactionRepository implements TransactionRepositoryInterface
         // generating report.
         $reversalTransactions = array_filter($this->transactions,
             function ($v, $k) {
-                return $v->getType() == TransactionType::REVERSAL();
+                return $v->getType() == TransactionType::REVERSAL;
             },
             ARRAY_FILTER_USE_BOTH
         );
@@ -55,7 +55,7 @@ class InMemoryTransactionRepository implements TransactionRepositoryInterface
                 return $v->getMerchantName() == $merchant
                     && $v->getTransactedAt()->isAfter($fromDate)
                     && $v->getTransactedAt()->isBefore($toDate)
-                    && $v->getType() == TransactionType::PAYMENT()
+                    && $v->getType() == TransactionType::PAYMENT
                     && !in_array($v->getId(), $reversalRelatedTransactionIds);
             },
             mode: ARRAY_FILTER_USE_BOTH

@@ -2,15 +2,11 @@
 
 namespace TransactionAnalyser;
 
-use MyCLabs\Enum\Enum;
-
+// PHP 8.1 introduces enum.
 // see:https://github.com/myclabs/php-enum
-/**
- * @method static PAYMENT()
- * @method static REVERSAL()
- */
-class TransactionType extends Enum
+enum TransactionType:string
 {
-    private const PAYMENT = "PAYMENT";
-    private const  REVERSAL = "REVERSAL";
+    case PAYMENT="PAYMENT";
+    case REVERSAL="REVERSAL";
 }
+

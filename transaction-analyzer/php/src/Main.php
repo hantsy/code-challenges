@@ -3,6 +3,8 @@
 namespace TransactionAnalyser;
 
 use Brick\DateTime\LocalDateTime;
+use Brick\DateTime\Parser\PatternParser;
+use Brick\DateTime\Parser\PatternParserBuilder;
 use Brick\Math\BigDecimal;
 use DateTime;
 
@@ -27,8 +29,9 @@ class Main
         //query result
         $filteredTransactions = $repository->queryByMerchantAndDateRange(
             $merchant,
-            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $fromDate)),
-            LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $toDate))
+            LocalDateTime::fromNativeDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $fromDate)),
+            LocalDateTime::fromNativeDateTime(DateTime::createFromFormat('d/m/Y H:i:s', $toDate))
+
         );
 
         echo "\$filteredTransactions:" . PHP_EOL;

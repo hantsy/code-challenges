@@ -2,7 +2,7 @@
 
 ## Prerequisite 
 
-* PHP 8
+* PHP 8.1+
 * Composer
 
 ## Run
