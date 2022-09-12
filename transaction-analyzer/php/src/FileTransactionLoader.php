@@ -35,7 +35,7 @@ class FileTransactionLoader implements TransactionLoaderInterface
                 $transactedAt = LocalDateTime::fromDateTime(DateTime::createFromFormat('d/m/Y H:i:s', trim($data[1])));//'dd/MM/yyyy HH:mm:ss',
                 $mount = BigDecimal::of(trim($data[2]));
                 $merchant = trim($data[3]);
-                $type = new TransactionType(trim($data[4]));
+                $type = TransactionType::from(trim($data[4]));
                 $reversalTransactionId = null;
                 if ($num == 6) {
                     $reversalTransactionId = trim($data[5]);
