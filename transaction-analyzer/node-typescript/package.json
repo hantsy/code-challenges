@@ -17,7 +17,7 @@
     "@types/jest": "^27.5.0",
     "@types/node": "^18.7.16",
     "jest": "^27.5.1",
-    "jest-mock-extended": "^2.0.7",
+    "jest-mock-extended": "^3.0.1",
     "moq.ts": "^9.0.2",
     "nodemon": "^2.0.19",
     "rimraf": "^3.0.2",
