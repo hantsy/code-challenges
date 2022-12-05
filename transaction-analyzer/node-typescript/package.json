@@ -15,7 +15,7 @@
   "devDependencies": {
     "@types/big.js": "^6.1.6",
     "@types/jest": "^27.5.0",
-    "@types/node": "^18.11.9",
+    "@types/node": "^18.11.10",
     "jest": "^27.5.1",
     "jest-mock-extended": "^3.0.1",
     "moq.ts": "^9.0.2",
