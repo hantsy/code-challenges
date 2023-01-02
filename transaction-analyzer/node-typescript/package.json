@@ -28,7 +28,7 @@
     "typescript": "^4.9.3"
   },
   "dependencies": {
-    "@js-joda/core": "^5.4.2",
+    "@js-joda/core": "^5.5.0",
     "big.js": "^6.2.1",
     "readline-sync": "^1.4.10"
   },
