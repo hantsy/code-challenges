@@ -1,14 +1,12 @@
-import { mock } from 'jest-mock-extended';
-import { DefaultTransactionLoader } from "./file-transaction-loader";
-import { Transaction } from "./transaction.interface";
-import { TransactionLoader } from "./transaction-loader.interface";
 import { DateTimeFormatter, LocalDateTime } from '@js-joda/core';
-import { TransactionType } from './transaction-type.enum';
 import Big from 'big.js';
+import { mock } from 'jest-mock-extended';
+import { IMock, Mock, Times } from "moq.ts";
+import { instance, mock as mockitoMock, reset, verify, when } from 'ts-mockito';
+import { TransactionLoader } from "./transaction-loader.interface";
 import { TransactionRepository } from './transaction-repository';
-import { mocked } from 'ts-jest/utils';
-import { Mock, It, Times, IMock } from "moq.ts";
-import { anyNumber, anyString, instance, mock as mockitoMock, reset, verify, when } from 'ts-mockito';
+import { TransactionType } from './transaction-type.enum';
+import { Transaction } from "./transaction.interface";
 
 
 //     ID, Date, Amount, Merchant, Type, Related Transaction
@@ -93,9 +91,9 @@ describe("TransactionRepository", () => {
     });
 
     describe(("mocking loader using Moq.ts"), () => {
-        let mockedloader: IMock<TransactionLoader>;
+        let mockedTransactionLoader: IMock<TransactionLoader>;
         beforeEach(() => {
-            mockedloader = new Mock<TransactionLoader>()
+            mockedTransactionLoader = new Mock<TransactionLoader>()
                 .setup(instance => instance.load())
                 .returns(fakeTransactionData);
         })
@@ -105,47 +103,47 @@ describe("TransactionRepository", () => {
         })
 
         it("test query by merchant and date range(moq.ts)", () => {
-            const repsoitory = new TransactionRepository(mockedloader.object());
+            const repository = new TransactionRepository(mockedTransactionLoader.object());
             const merchantName = "Kwik-E-Mart";
             const fromDate = "20/08/2020 12:00:00";
             const toDate = "20/08/2020 13:00:00";
-            const transactions = repsoitory
+            const transactions = repository
                 .queryByMerchantAndDateRange(
                     merchantName,
                     LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
                 )
             expect(transactions.length).toBe(1);
-            mockedloader.verify(instance => instance.load(), Times.Exactly(1));
+            mockedTransactionLoader.verify(instance => instance.load(), Times.Exactly(1));
         });
 
     });
 
     describe(("mocking loader using ts-mockito"), () => {
-        let mockedloader: TransactionLoader;
+        let mockedTransactionLoader: TransactionLoader;
         beforeEach(() => {
-            mockedloader = mockitoMock<TransactionLoader>();
-            when(mockedloader.load()).thenReturn(fakeTransactionData);
+            mockedTransactionLoader = mockitoMock<TransactionLoader>();
+            when(mockedTransactionLoader.load()).thenReturn(fakeTransactionData);
         })
 
         afterEach(() => {
-            reset(mockedloader);
+            reset(mockedTransactionLoader);
         })
 
         it("test query by merchant and date range(ts-mockito)", () => {
 
-            const repsoitory = new TransactionRepository(instance(mockedloader));
+            const repository = new TransactionRepository(instance(mockedTransactionLoader));
             const merchantName = "Kwik-E-Mart";
             const fromDate = "20/08/2020 12:00:00";
             const toDate = "20/08/2020 13:00:00";
-            const transactions = repsoitory
+            const transactions = repository
                 .queryByMerchantAndDateRange(
                     merchantName,
                     LocalDateTime.parse(fromDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss")),
                     LocalDateTime.parse(toDate, DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss"))
                 )
             expect(transactions.length).toBe(1);
-            verify(mockedloader.load()).once();
+            verify(mockedTransactionLoader.load()).once();
         });
 
     });
