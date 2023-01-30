@@ -20,7 +20,7 @@
     "jest-mock-extended": "^3.0.1",
     "moq.ts": "^10.0.2",
     "nodemon": "^2.0.20",
-    "rimraf": "^3.0.2",
+    "rimraf": "^4.1.1",
     "ts-jest": "^27.1.4",
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.9.1",
@@ -28,7 +28,7 @@
     "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@js-joda/core": "^5.5.0",
+    "@js-joda/core": "^5.5.2",
     "big.js": "^6.2.1",
     "readline-sync": "^1.4.10"
   },
