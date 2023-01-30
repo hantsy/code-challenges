@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
-    "module": "esnext",
+    "module": "ES2020",
     "esModuleInterop": true,
-    "target": "es6",
+    "target": "ES2015",
     "lib": [
       "es2015"
     ],

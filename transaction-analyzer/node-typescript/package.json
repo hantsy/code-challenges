@@ -1,7 +1,6 @@
 {
   "name": "transaction-analyzer",
   "version": "1.0.0",
-  "type": "module",
   "description": "TransactionAnalyzer implemented in NodeJS 16+ and TypeScript",
   "main": "dist/index.js",
   "scripts": {
