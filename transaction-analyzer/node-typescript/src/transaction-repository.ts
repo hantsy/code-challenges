@@ -17,8 +17,8 @@ export class TransactionRepository {
         toDate: LocalDateTime
     ): Transaction[] {
         console.log("Merchant name:" + merchant);
-        console.log("From Date:" + fromDate);
-        console.log("To Date:" + toDate);
+        console.log(`From Date:${fromDate}`);
+        console.log(`To Date:${toDate}`);
 
         const reversalRelatedIds = this.data.filter(it => it.type == TransactionType.REVERSAL)
             .map(t => t.relatedTransactionId);
