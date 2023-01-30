@@ -8,7 +8,7 @@
     "start": "npm run build && node ./dist/index.js",
     "start:dev": "nodemon",
     "lint": "eslint --fix src/**/*.ts",
-    "test": "node --experimental-vm-modules --no-warnings node_modules/jest/bin/jest.js --config src/jest.config.mjs"
+    "test": "jest --config ./jest.config.js"
   },
   "author": "Hantsy Bai <hantsy@gmail.com>",
   "license": "Apache License v2.0",
