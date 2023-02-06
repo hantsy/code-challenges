@@ -4,12 +4,14 @@ namespace TransactionAnalyser\Tests;
 
 use Brick\DateTime\LocalDateTime;
 use DateTime;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use TransactionAnalyser\InMemoryTransactionRepository;
 use TransactionAnalyser\TransactionLoaderInterface;
 
 class TransactionRepositoryTest extends TestCase
 {
+    #[Test]
     public function testTransactionRepositoryAgainstFakeLoader()
     {
         $loader = new FakeTransactionLoader();
@@ -23,6 +25,7 @@ class TransactionRepositoryTest extends TestCase
         $this->assertEquals(1, sizeof($transactions));
     }
 
+    #[Test]
     public function testTransactionRepositoryAgainstFakeLoaderMock()
     {
         $stub = $this->createMock(TransactionLoaderInterface::class);
@@ -36,5 +39,4 @@ class TransactionRepositoryTest extends TestCase
         );
         $this->assertEquals(1, sizeof($transactions));
     }
-
 }

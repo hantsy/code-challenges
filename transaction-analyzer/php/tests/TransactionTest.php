@@ -5,15 +5,18 @@ namespace TransactionAnalyser\Tests;
 use Brick\DateTime\LocalDateTime;
 use Brick\DateTime\TimeZone;
 use Brick\Math\BigDecimal;
+use PHPUnit\Framework\Attributes\Before;
+use PHPUnit\Framework\Attributes\Test;
 use TransactionAnalyser\Transaction;
 use TransactionAnalyser\TransactionType;
 use PHPUnit\Framework\TestCase;
 
 class TransactionTest extends TestCase
 {
-    private ?Transaction $transaction = null;
+    private Transaction|null $transaction = null;
 
-    protected function setUp(): void
+    #[Before]
+    function setUp(): void
     {
         $this->transaction = new Transaction(
             "test",
@@ -26,6 +29,7 @@ class TransactionTest extends TestCase
     }
 
 
+    #[Test]
     public function testNewTransaction()
     {
         $this->assertEquals("test", $this->transaction->getId());
