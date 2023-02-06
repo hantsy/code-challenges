@@ -17,9 +17,9 @@
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <maven-surefire-plugin.version>3.0.0-M8</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.0.0-M8</maven-failsafe-plugin.version>
-        <kotlin.version>1.8.0</kotlin.version>
+        <kotlin.version>1.8.10</kotlin.version>
         <junit-jupiter.version>5.9.2</junit-jupiter.version>
-        <mockk.version>1.13.3</mockk.version>
+        <mockk.version>1.13.4</mockk.version>
     </properties>
 
     <dependencies>
@@ -61,13 +61,13 @@
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-runner-junit5-jvm</artifactId>
-            <version>5.5.4</version>
+            <version>5.5.5</version>
             <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-assertions-core-jvm</artifactId>
-            <version>5.5.4</version>
+            <version>5.5.5</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
