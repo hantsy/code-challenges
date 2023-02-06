@@ -24,7 +24,7 @@ const fakeTransactionData = [
     ),
     amount: Big(59.99),
     merchantName: 'Kwik-E-Mart',
-    type: TransactionType['PAYMENT'],
+    type: TransactionType.PAYMENT,
     relatedTransactionId: ''
   } as Transaction,
   {
@@ -35,7 +35,7 @@ const fakeTransactionData = [
     ),
     amount: Big(10.95),
     merchantName: 'Kwik-E-Mart',
-    type: TransactionType['PAYMENT'],
+    type: TransactionType.PAYMENT,
     relatedTransactionId: ''
   } as Transaction,
   {
@@ -46,7 +46,7 @@ const fakeTransactionData = [
     ),
     amount: Big(5.0),
     merchantName: 'MacLaren',
-    type: TransactionType['PAYMENT'],
+    type: TransactionType.PAYMENT,
     relatedTransactionId: ''
   } as Transaction,
   {
@@ -57,7 +57,7 @@ const fakeTransactionData = [
     ),
     amount: Big(5.0),
     merchantName: 'Kwik-E-Mart',
-    type: TransactionType['PAYMENT'],
+    type: TransactionType.PAYMENT,
     relatedTransactionId: ''
   } as Transaction,
   {
@@ -68,7 +68,7 @@ const fakeTransactionData = [
     ),
     amount: Big(10.95),
     merchantName: 'Kwik-E-Mart',
-    type: TransactionType['REVERSAL'],
+    type: TransactionType.REVERSAL,
     relatedTransactionId: 'YGXKOEIA'
   } as Transaction,
   {
@@ -79,7 +79,7 @@ const fakeTransactionData = [
     ),
     amount: Big(99.5),
     merchantName: 'MacLaren',
-    type: TransactionType['PAYMENT'],
+    type: TransactionType.PAYMENT,
     relatedTransactionId: ''
   } as Transaction
 ] as Transaction[];
@@ -87,7 +87,7 @@ const fakeTransactionData = [
 describe('TransactionRepository', () => {
   describe('mocking loader using jest-mock-extended', () => {
     it('test query by merchant and date range(jest-mock-extended)', () => {
-      let loader = mock<TransactionLoader>();
+      const loader = mock<TransactionLoader>();
       loader.load.mockImplementation(() => {
         return fakeTransactionData;
       });
