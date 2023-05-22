@@ -28,7 +28,7 @@
     "moq.ts": "^10.0.6",
     "nodemon": "^2.0.22",
     "prettier": "^2.8.8",
-    "rimraf": "^4.4.1",
+    "rimraf": "^5.0.1",
     "ts-jest": "^27.1.4",
     "ts-mockito": "^2.6.1",
     "ts-node": "^10.9.1",
