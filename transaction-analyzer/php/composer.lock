@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4ab0f19f16cd49644b0078b53ea5c31b",
+    "content-hash": "105297a5d90f0bd441ef60864d0f0ad7",
     "packages": [
         {
             "name": "brick/date-time",
-            "version": "0.4.2",
+            "version": "0.5.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/date-time.git",
-                "reference": "4dbbb47917636be03e4bd83e96fb471321f0d4b0"
+                "reference": "aa6555fd8b7f74f477208c73fbdb93766f34e562"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/date-time/zipball/4dbbb47917636be03e4bd83e96fb471321f0d4b0",
-                "reference": "4dbbb47917636be03e4bd83e96fb471321f0d4b0",
+                "url": "https://api.github.com/repos/brick/date-time/zipball/aa6555fd8b7f74f477208c73fbdb93766f34e562",
+                "reference": "aa6555fd8b7f74f477208c73fbdb93766f34e562",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
                 "phpunit/phpunit": "^9.0",
-                "vimeo/psalm": "4.23.0"
+                "vimeo/psalm": "5.11.0"
             },
             "suggest": {
                 "ext-timezonedb": "This PECL extension provides up-to-date timezone information"
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/date-time/issues",
-                "source": "https://github.com/brick/date-time/tree/0.4.2"
+                "source": "https://github.com/brick/date-time/tree/0.5.0"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-05-19T21:31:55+00:00"
+            "time": "2023-06-25T21:14:29+00:00"
         },
         {
             "name": "brick/math",
