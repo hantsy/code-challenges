@@ -27,7 +27,7 @@
     "jest-mock-extended": "^3.0.4",
     "moq.ts": "^10.0.6",
     "nodemon": "^3.0.1",
-    "prettier": "^2.8.8",
+    "prettier": "^3.0.0",
     "rimraf": "^5.0.1",
     "ts-jest": "^27.1.4",
     "ts-mockito": "^2.6.1",
