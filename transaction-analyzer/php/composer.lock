@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "brick/date-time",
-            "version": "0.5.0",
+            "version": "0.5.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/date-time.git",
-                "reference": "aa6555fd8b7f74f477208c73fbdb93766f34e562"
+                "reference": "c510c6bfc9ee3e9acf6b98da84cae87d46cb2389"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/date-time/zipball/aa6555fd8b7f74f477208c73fbdb93766f34e562",
-                "reference": "aa6555fd8b7f74f477208c73fbdb93766f34e562",
+                "url": "https://api.github.com/repos/brick/date-time/zipball/c510c6bfc9ee3e9acf6b98da84cae87d46cb2389",
+                "reference": "c510c6bfc9ee3e9acf6b98da84cae87d46cb2389",
                 "shasum": ""
             },
             "require": {
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/date-time/issues",
-                "source": "https://github.com/brick/date-time/tree/0.5.0"
+                "source": "https://github.com/brick/date-time/tree/0.5.1"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-06-25T21:14:29+00:00"
+            "time": "2023-08-01T09:18:56+00:00"
         },
         {
             "name": "brick/math",
