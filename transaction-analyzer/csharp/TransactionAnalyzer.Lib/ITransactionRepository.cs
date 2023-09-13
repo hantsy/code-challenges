@@ -1,13 +1,12 @@
 ﻿using System;
 
-namespace TransactionAnalyzer.Lib
+namespace TransactionAnalyzer.Lib;
+
+public interface ITransactionRepository
 {
-    public interface ITransactionRepository
-    {
-        Transaction[] QueryByMerchantAndDateRange(
-            string merchant,
-            DateTime fromDate,
-            DateTime toDate
-        );
-    }
+    Transaction[] QueryByMerchantAndDateRange(
+        string merchant,
+        DateTime fromDate,
+        DateTime toDate
+    );
 }

@@ -1,11 +1,10 @@
-﻿namespace TransactionAnalyzer.Lib
+﻿namespace TransactionAnalyzer.Lib;
+
+public interface ITransactionLoader
 {
-    public interface ITransactionLoader
-    {
-        /// <summary>
-        /// Load transactions from an external resource.
-        /// </summary>
-        /// <returns>The loaded transactions.</returns>
-        Transaction[] Load();
-    }
+    /// <summary>
+    ///     Load transactions from an external resource.
+    /// </summary>
+    /// <returns>The loaded transactions.</returns>
+    Transaction[] Load();
 }

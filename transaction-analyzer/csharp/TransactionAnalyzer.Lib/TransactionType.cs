@@ -1,8 +1,7 @@
-namespace TransactionAnalyzer.Lib
+namespace TransactionAnalyzer.Lib;
+
+public enum TransactionType
 {
-    public enum TransactionType
-    {
-        PAYMENT,
-        REVERSAL
-    }
+    PAYMENT,
+    REVERSAL
 }
