@@ -8,16 +8,16 @@
     "packages": [
         {
             "name": "brick/date-time",
-            "version": "0.5.1",
+            "version": "0.5.2",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/date-time.git",
-                "reference": "c510c6bfc9ee3e9acf6b98da84cae87d46cb2389"
+                "reference": "4abdefd7cd8e80adbeb87534719f7cada34714c0"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/date-time/zipball/c510c6bfc9ee3e9acf6b98da84cae87d46cb2389",
-                "reference": "c510c6bfc9ee3e9acf6b98da84cae87d46cb2389",
+                "url": "https://api.github.com/repos/brick/date-time/zipball/4abdefd7cd8e80adbeb87534719f7cada34714c0",
+                "reference": "4abdefd7cd8e80adbeb87534719f7cada34714c0",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
             "require-dev": {
                 "php-coveralls/php-coveralls": "^2.2",
                 "phpunit/phpunit": "^9.0",
-                "vimeo/psalm": "5.11.0"
+                "vimeo/psalm": "5.15.0"
             },
             "suggest": {
                 "ext-timezonedb": "This PECL extension provides up-to-date timezone information"
@@ -51,7 +51,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/date-time/issues",
-                "source": "https://github.com/brick/date-time/tree/0.5.1"
+                "source": "https://github.com/brick/date-time/tree/0.5.2"
             },
             "funding": [
                 {
@@ -59,7 +59,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-08-01T09:18:56+00:00"
+            "time": "2023-09-16T22:38:52+00:00"
         },
         {
             "name": "brick/math",
