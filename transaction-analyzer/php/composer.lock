@@ -63,16 +63,16 @@
         },
         {
             "name": "brick/math",
-            "version": "0.12.0",
+            "version": "0.12.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/math.git",
-                "reference": "21e0a1e6bc7aa5b640ce8d82b2ff5f251c41a952"
+                "reference": "f510c0a40911935b77b86859eb5223d58d660df1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/math/zipball/21e0a1e6bc7aa5b640ce8d82b2ff5f251c41a952",
-                "reference": "21e0a1e6bc7aa5b640ce8d82b2ff5f251c41a952",
+                "url": "https://api.github.com/repos/brick/math/zipball/f510c0a40911935b77b86859eb5223d58d660df1",
+                "reference": "f510c0a40911935b77b86859eb5223d58d660df1",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +111,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/math/issues",
-                "source": "https://github.com/brick/math/tree/0.12.0"
+                "source": "https://github.com/brick/math/tree/0.12.1"
             },
             "funding": [
                 {
@@ -119,7 +119,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2023-11-26T14:36:23+00:00"
+            "time": "2023-11-29T23:19:16+00:00"
         }
     ],
     "packages-dev": [
