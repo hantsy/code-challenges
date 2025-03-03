@@ -4,7 +4,7 @@
   "type": "project",
   "require": {
     "php": "^8.1",
-    "brick/math": "^0.12.0",
+    "brick/math": "^0.13.0",
     "brick/date-time": "^0.6.0",
     "ext-readline": "*"
   },
