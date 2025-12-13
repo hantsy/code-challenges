@@ -1,0 +1,10 @@
+{
+    "configurations": [
+         {
+             "type": "docker-compose-up",
+             "name": "",
+             "files": [],
+         },
+        
+    ]
+}
