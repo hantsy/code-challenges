@@ -87,7 +87,7 @@ func TestRepository_QueryByMerchantAndDateRange(t *testing.T) {
 	b := Transaction{Id: "B", TransactedAt: baseTime.Add(30 * time.Minute), Amount: big.NewFloat(5.0), MerchantName: "Shop", Type: PAYMENT}
 	// reversal of B
 	r := Transaction{Id: "R", TransactedAt: baseTime.Add(35 * time.Minute), Amount: big.NewFloat(-5.0), MerchantName: "Shop", Type: REVERSAL, RelatedTransactionId: "B"}
-	loader := stubLoader{out: []Transaction{a, b, r}}
+	loader := loaderStub{txs: []Transaction{a, b, r}}
 	repo := NewTransactionRepository(loader)
 
 	from := baseTime.Add(-time.Minute)
@@ -182,7 +182,7 @@ func TestRepository_QueryByMerchantAndDateRange_Table(t *testing.T) {
 
 	for _, c := range cases {
 		t.Run(c.name, func(t *testing.T) {
-			loader := stubLoader{out: c.txs}
+			loader := loaderStub{txs: c.txs}
 			repo := NewTransactionRepository(loader)
 			from, _ := time.Parse(customDateTimeLayout, c.from)
 			to, _ := time.Parse(customDateTimeLayout, c.to)
