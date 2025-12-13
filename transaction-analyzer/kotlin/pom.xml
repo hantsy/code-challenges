@@ -17,9 +17,9 @@
         <kotlin.compiler.jvmTarget>17</kotlin.compiler.jvmTarget>
         <maven-surefire-plugin.version>3.2.5</maven-surefire-plugin.version>
         <maven-failsafe-plugin.version>3.5.2</maven-failsafe-plugin.version>
-        <kotlin.version>1.9.21</kotlin.version>
+        <kotlin.version>2.1.0</kotlin.version>
         <junit-jupiter.version>5.10.1</junit-jupiter.version>
-        <mockk.version>1.13.8</mockk.version>
+        <mockk.version>1.13.17</mockk.version>
     </properties>
 
     <dependencies>
@@ -67,7 +67,7 @@
         <dependency>
             <groupId>io.kotest</groupId>
             <artifactId>kotest-assertions-core-jvm</artifactId>
-            <version>5.8.0</version>
+            <version>5.9.1</version>
             <scope>test</scope>
         </dependency>
     </dependencies>
@@ -108,7 +108,7 @@
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
-                <version>3.2.0</version>
+                <version>3.5.0</version>
                 <configuration>
                     <mainClass>MainKt</mainClass>
                 </configuration>
