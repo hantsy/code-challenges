@@ -4,20 +4,20 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "504f5bdffc14027514f7c03203287ff0",
+    "content-hash": "c4ae609272053167b52b91d1e70e758a",
     "packages": [
         {
             "name": "brick/date-time",
-            "version": "0.7.0",
+            "version": "0.8.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/brick/date-time.git",
-                "reference": "7b39737f630a0e5d2a2dc0834b0da77a065efaed"
+                "reference": "00df278bda44e6814c8529457d9fc5c4b91bceae"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/brick/date-time/zipball/7b39737f630a0e5d2a2dc0834b0da77a065efaed",
-                "reference": "7b39737f630a0e5d2a2dc0834b0da77a065efaed",
+                "url": "https://api.github.com/repos/brick/date-time/zipball/00df278bda44e6814c8529457d9fc5c4b91bceae",
+                "reference": "00df278bda44e6814c8529457d9fc5c4b91bceae",
                 "shasum": ""
             },
             "require": {
@@ -26,8 +26,7 @@
             "require-dev": {
                 "guzzlehttp/guzzle": "^7.0",
                 "php-coveralls/php-coveralls": "^2.2",
-                "phpunit/phpunit": "^10.5",
-                "vimeo/psalm": "5.25.0"
+                "phpunit/phpunit": "^10.5"
             },
             "suggest": {
                 "ext-timezonedb": "This PECL extension provides up-to-date timezone information"
@@ -69,7 +68,7 @@
             ],
             "support": {
                 "issues": "https://github.com/brick/date-time/issues",
-                "source": "https://github.com/brick/date-time/tree/0.7.0"
+                "source": "https://github.com/brick/date-time/tree/0.8.1"
             },
             "funding": [
                 {
@@ -77,7 +76,7 @@
                     "type": "github"
                 }
             ],
-            "time": "2024-06-23T14:32:17+00:00"
+            "time": "2025-11-11T15:11:18+00:00"
         },
         {
             "name": "brick/math",
@@ -1759,13 +1758,13 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": [],
+    "stability-flags": {},
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
         "php": "^8.1",
         "ext-readline": "*"
     },
-    "platform-dev": [],
+    "platform-dev": {},
     "plugin-api-version": "2.6.0"
 }
