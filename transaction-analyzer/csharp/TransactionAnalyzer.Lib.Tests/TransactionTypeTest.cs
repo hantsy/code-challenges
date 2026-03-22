@@ -6,11 +6,11 @@ namespace TransactionAnalyzer.Lib.Tests;
 public class TransactionTypeTest
 {
     [Theory]
-    [InlineData("PAYMENT", TransactionType.PAYMENT)]
-    [InlineData("REVERSAL", TransactionType.REVERSAL)]
+    [InlineData("PAYMENT", TransactionType.Payment)]
+    [InlineData("REVERSAL", TransactionType.Reversal)]
     public void ParseValidStringToTransactionType_ReturnTrue(string value, TransactionType expected)
     {
-        Enum.TryParse(value, out TransactionType parsedType);
+        Enum.TryParse(value, true, out TransactionType parsedType);
         Assert.Equal(expected, parsedType);
     }
 

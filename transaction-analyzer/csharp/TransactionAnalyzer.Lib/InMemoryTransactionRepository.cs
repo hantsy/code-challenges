@@ -3,14 +3,9 @@ using System.Linq;
 
 namespace TransactionAnalyzer.Lib;
 
-public class InMemoryTransactionRepository : ITransactionRepository
+public class InMemoryTransactionRepository(ITransactionLoader loader) : ITransactionRepository
 {
-    private readonly Transaction[] _data;
-
-    public InMemoryTransactionRepository(ITransactionLoader loader)
-    {
-        _data = loader.Load();
-    }
+    private readonly Transaction[] _data = loader.Load();
 
     public Transaction[] QueryByMerchantAndDateRange(
         string merchant,
@@ -19,13 +14,13 @@ public class InMemoryTransactionRepository : ITransactionRepository
     )
     {
         var reversalRelatedIds = _data
-            .Where(s => s.Type == TransactionType.REVERSAL)
+            .Where(s => s.Type == TransactionType.Reversal)
             .Select(s => s.RelatedTransactionId);
 
         return _data.Where(s => s.MerchantName.Equals(merchant)
                                 && s.TransactedAt > fromDate
                                 && s.TransactedAt < toDate
-                                && s.Type == TransactionType.PAYMENT
+                                && s.Type == TransactionType.Payment
                                 && !reversalRelatedIds.Contains(s.Id)
         ).ToArray();
     }

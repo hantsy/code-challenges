@@ -2,6 +2,6 @@ namespace TransactionAnalyzer.Lib;
 
 public enum TransactionType
 {
-    PAYMENT,
-    REVERSAL
+    Payment,
+    Reversal
 }
