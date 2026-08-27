@@ -31,7 +31,7 @@ public class TransactionRepositoryTest
     {
         var mockLoader = new Mock<ITransactionLoader>();
 
-        mockLoader.Setup(loader => loader.Load()).Returns(fakeLoadedData);
+        mockLoader.Setup(loader => loader.Load()).Returns(FakeLoadedData);
         var transactions = new InMemoryTransactionRepository(mockLoader.Object)
             .QueryByMerchantAndDateRange(
                 merchant,
@@ -51,7 +51,7 @@ public class TransactionRepositoryTest
     AKNBVHMN, 20/08/2020 13:14:11, 10.95, Kwik-E-Mart, REVERSAL, YGXKOEIA
     JYAPKZFZ, 20/08/2020 14:07:10, 99.50, MacLaren, PAYMENT,
     */
-    private Transaction[] fakeLoadedData()
+    private Transaction[] FakeLoadedData()
     {
         return Fixtures.Load();
     }
