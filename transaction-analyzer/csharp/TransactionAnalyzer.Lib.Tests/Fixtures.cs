@@ -17,7 +17,7 @@ internal class Fixtures
                     DateTimeStyles.None),
                 Amount = new decimal(59.99),
                 MerchantName = "Kwik-E-Mart",
-                Type = TransactionType.PAYMENT,
+                Type = TransactionType.Payment,
                 RelatedTransactionId = ""
             },
             new()
@@ -28,7 +28,7 @@ internal class Fixtures
                     DateTimeStyles.None),
                 Amount = new decimal(10.95),
                 MerchantName = "Kwik-E-Mart",
-                Type = TransactionType.PAYMENT,
+                Type = TransactionType.Payment,
                 RelatedTransactionId = ""
             },
 
@@ -40,7 +40,7 @@ internal class Fixtures
                     DateTimeStyles.None),
                 Amount = new decimal(5.00),
                 MerchantName = "MacLaren",
-                Type = TransactionType.PAYMENT,
+                Type = TransactionType.Payment,
                 RelatedTransactionId = ""
             },
 
@@ -52,7 +52,7 @@ internal class Fixtures
                     DateTimeStyles.None),
                 Amount = new decimal(5.00),
                 MerchantName = "Kwik-E-Mart",
-                Type = TransactionType.PAYMENT,
+                Type = TransactionType.Payment,
                 RelatedTransactionId = ""
             },
 
@@ -64,7 +64,7 @@ internal class Fixtures
                     DateTimeStyles.None),
                 Amount = new decimal(10.95),
                 MerchantName = "Kwik-E-Mart",
-                Type = TransactionType.REVERSAL,
+                Type = TransactionType.Reversal,
                 RelatedTransactionId = "YGXKOEIA"
             },
 
@@ -76,7 +76,7 @@ internal class Fixtures
                     DateTimeStyles.None),
                 Amount = new decimal(99.50),
                 MerchantName = "MacLaren",
-                Type = TransactionType.PAYMENT,
+                Type = TransactionType.Payment,
                 RelatedTransactionId = ""
             }
         };

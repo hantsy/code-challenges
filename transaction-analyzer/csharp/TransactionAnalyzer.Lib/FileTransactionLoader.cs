@@ -5,18 +5,11 @@ using System.Linq;
 
 namespace TransactionAnalyzer.Lib;
 
-public class FileTransactionLoader : ITransactionLoader
+public class FileTransactionLoader(string csvFilePath) : ITransactionLoader
 {
-    private readonly string _csvFilePath;
-
-    public FileTransactionLoader(string csvFilePath)
-    {
-        _csvFilePath = csvFilePath;
-    }
-
     public Transaction[] Load()
     {
-        var lines = File.ReadAllLines(_csvFilePath);
+        var lines = File.ReadAllLines(csvFilePath);
         return lines.Skip(1).Select(BuildTransaction).ToArray();
     }
 
@@ -28,7 +21,7 @@ public class FileTransactionLoader : ITransactionLoader
         Console.WriteLine("Split into fields:" + fields.Length);
 
         //try to parse the fields
-        Enum.TryParse(fields[4].Trim(), out TransactionType parsedType);
+        Enum.TryParse(fields[4].Trim(), true,  out TransactionType parsedType);
         DateTime.TryParseExact(fields[1].Trim(), "dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture,
             DateTimeStyles.None, out var parsedTransactedAt);
         return new Transaction
