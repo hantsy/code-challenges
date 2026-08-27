@@ -14,7 +14,7 @@ public class TransactionTest
             TransactedAt = DateTime.Now,
             Amount = new decimal(9.00),
             MerchantName = "testMerchant",
-            Type = TransactionType.PAYMENT,
+            Type = TransactionType.Payment,
             RelatedTransactionId = ""
         };
         Assert.Equal("test", tran.Id);
