@@ -1,13 +1,13 @@
 package com.example.demo;
 
-import com.example.demo.adapter.in.console.ConsoleTransactionReportAdapter;
-import com.example.demo.adapter.out.csv.CsvTransactionLoaderAdapter;
-import com.example.demo.adapter.out.notification.EmailNotifierAdapter;
-import com.example.demo.adapter.out.notification.SlackNotifierAdapter;
-import com.example.demo.adapter.out.persistence.InMemoryTransactionStoreAdapter;
-import com.example.demo.domain.service.TransactionLoadService;
-import com.example.demo.domain.service.TransactionQueryService;
-import com.example.demo.domain.service.TransactionStatisticsReportService;
+import com.example.demo.application.internal.DefaultGenerateTransactionStatisticsReportService;
+import com.example.demo.application.internal.DefaultLoadTransactionsService;
+import com.example.demo.application.internal.DefaultQueryValidPaymentTransactionsService;
+import com.example.demo.infrastructure.csv.CsvTransactionLoader;
+import com.example.demo.infrastructure.notification.EmailNotificationSender;
+import com.example.demo.infrastructure.notification.SlackNotificationSender;
+import com.example.demo.infrastructure.persistence.InMemoryTransactionRepository;
+import com.example.demo.interfaces.console.TransactionReportConsole;
 
 import java.util.List;
 import java.util.Scanner;
@@ -17,24 +17,24 @@ public class Main {
     private static final Logger LOGGER = Logger.getLogger(Main.class.getName());
 
     public static void main(String[] args) {
-        // outbound adapters
-        var store = new InMemoryTransactionStoreAdapter();
-        var loader = new CsvTransactionLoaderAdapter(Main.class.getResourceAsStream("/input.csv"));
+        // infrastructure
+        var store = new InMemoryTransactionRepository();
+        var loader = new CsvTransactionLoader(Main.class.getResourceAsStream("/input.csv"));
         var notifiers = List.of(
-                new SlackNotifierAdapter(),
-                new EmailNotifierAdapter(),
+                new SlackNotificationSender(),
+                new EmailNotificationSender(),
                 notification -> LOGGER.info("Sent from a dummy notifier")
         );
 
-        // domain services implementing the inbound ports
-        var loadService = new TransactionLoadService(loader, store);
+        // application services
+        var loadService = new DefaultLoadTransactionsService(loader, store);
         loadService.loadAndPersist();
 
-        var queryService = new TransactionQueryService(store, notifiers);
-        var reportService = new TransactionStatisticsReportService(queryService);
+        var queryService = new DefaultQueryValidPaymentTransactionsService(store, notifiers);
+        var reportService = new DefaultGenerateTransactionStatisticsReportService(queryService);
 
-        // inbound adapter
-        var console = new ConsoleTransactionReportAdapter(reportService);
+        // interfaces
+        var console = new TransactionReportConsole(reportService);
         console.run(new Scanner(System.in));
     }
 }

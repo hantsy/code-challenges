@@ -1,27 +1,43 @@
-# Java version (DDD / Hexagonal architecture)
+# Java version (DDD layered architecture)
 
-A variant of the transaction analyzer structured with a DDD layered package
-architecture (ports & adapters / hexagonal architecture).
+A variant of the transaction analyzer structured with a simple DDD layered
+package architecture.
 
 ## Architecture
 
 ```
 com.example.demo
+├── application
+│   ├── LoadTransactionsService                # interface, command service
+│   ├── QueryValidPaymentTransactionsService   # interface, query service
+│   ├── GenerateTransactionStatisticsReportService
+│   ├── TransactionStatisticsRequest/Response  # query DTOs
+│   └── internal                               # service implementations
+│       ├── DefaultLoadTransactionsService
+│       ├── DefaultQueryValidPaymentTransactionsService
+│       └── DefaultGenerateTransactionStatisticsReportService
 ├── domain
-│   ├── model     # Transaction, TransactionType, Notification (no outward dependencies)
-│   └── service   # domain services implementing the inbound ports
-├── port
-│   ├── in        # driving ports (+ report request/response)
-│   └── out       # driven ports (loader, persister, repository, notifier)
-└── adapter
-    ├── in        # driving adapters (console)
-    └── out       # driven adapters (csv, in-memory persistence, notification)
+│   ├── model                    # Transaction, TransactionType, Notification (pure)
+│   ├── repository               # TransactionRepository interface
+│   └── service                  # domain service interfaces
+│       ├── TransactionLoader    # source of transactions
+│       └── NotificationSender   # outbound notification
+├── infrastructure
+│   ├── csv                      # CsvTransactionLoader
+│   ├── notification             # EmailNotificationSender, SlackNotificationSender
+│   └── persistence              # InMemoryTransactionRepository
+└── interfaces
+    └── console                  # TransactionReportConsole
 ```
 
 The dependency rules are enforced by [ArchUnit](https://www.archunit.org/) tests:
-the domain model must not depend on any other package, domain services and
-ports must not depend on adapters, ports may only depend on the domain model,
-and inbound/outbound adapters must not depend on each other.
+the domain layer must not depend on any other layer, the application layer must
+not depend on infrastructure or interfaces, the interfaces layer may only
+depend on the application layer, and the infrastructure layer must not depend
+on interfaces or application service implementations (`application.internal`).
+Application services expose interfaces in `application`; their implementations
+reside in `application.internal`, and domain service interfaces (`TransactionLoader`,
+`NotificationSender`) are declared in `domain.service`.
 
 ## Prerequisite
 
