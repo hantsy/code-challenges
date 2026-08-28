@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import java.io.IOException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.nio.file.Files;
@@ -11,17 +10,14 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Scanner;
 import java.util.concurrent.CompletableFuture;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.function.Function;
-import java.util.function.Predicate;
 import java.util.logging.Logger;
 
 import static com.example.demo.TransactionAnalysisApplication.Functions.*;
-import static java.util.Collections.emptyList;
 
 public class TransactionAnalysisApplication {
-    public final static DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
+    public static final DateTimeFormatter customFormatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm:ss");
 
     public static void main(String[] args) {
         var scanner = new Scanner(System.in);
@@ -41,15 +37,10 @@ public class TransactionAnalysisApplication {
                 merchant
         );
 
-        //loading from a local file
-        CompletableFuture.supplyAsync(() -> readTransactionFile.apply(file))
-                .thenApply(transformToTransactionList)
-                // compute the transaction analysis data according to the analysis request input by user
-                // generate readable analysis report
-                .thenCombine(CompletableFuture.completedFuture(request), computeTransactionAnalysisResult)
-                // print the analysis result(simply via System.out)
+        // loading from a local file, analyzing, then printing the report as a fluent pipeline
+        CompletableFuture.supplyAsync(() -> loadTransactionsFromFile.apply(file))
+                .thenApply(analyze.apply(request))
                 .thenAccept(printTransactionAnalysisResult)
-                // make it happens.
                 .join();
     }
 
@@ -64,22 +55,45 @@ public class TransactionAnalysisApplication {
     ) {
     }
 
+    /**
+     * A {@link Function} that may throw a checked exception, so it can be composed
+     * fluently with other functions and bridged back to {@link Function} via
+     * {@link #unchecked()}.
+     */
+    @FunctionalInterface
+    interface CheckedFunction<T, R> {
+        R apply(T t) throws Exception;
+
+        default <V> CheckedFunction<T, V> andThen(CheckedFunction<? super R, ? extends V> after) {
+            return input -> after.apply(apply(input));
+        }
+
+        default Function<T, R> unchecked() {
+            return input -> {
+                try {
+                    return apply(input);
+                } catch (Exception e) {
+                    throw new RuntimeException(e);
+                }
+            };
+        }
+
+        static <T, R> CheckedFunction<T, R> of(CheckedFunction<T, R> function) {
+            return function;
+        }
+    }
+
     public static class Functions {
         private final static Logger LOGGER = Logger.getLogger(Functions.class.getSimpleName());
 
-        static Function<String, List<String>> readTransactionFile = (String filePath) -> {
-            try {
-                return Files.readAllLines(Paths.get(filePath)).stream().skip(1).toList();
-            } catch (IOException e) {
-                e.printStackTrace();
-                throw new IllegalArgumentException("file path: '" + filePath + "' was not found.");
-            }
-        };
+        static final Function<String, List<String>> readTransactionFile = CheckedFunction
+                .<String, List<String>>of(path -> Files.readAllLines(Paths.get(path)))
+                .andThen(lines -> lines.stream().skip(1).toList())
+                .unchecked();
 
-        static Function<String, Transaction> parseTransactionLine = (String line) -> {
-            LOGGER.info("reading line:" + line);
+        static final Function<String, Transaction> parseTransactionLine = (String line) -> {
+            LOGGER.info("reading line: " + line);
             var fields = line.split(",");
-            LOGGER.info("fields: " + fields.length);
             return new Transaction(
                     fields[0].trim(),
                     LocalDateTime.parse(fields[1].trim(), customFormatter),
@@ -90,47 +104,50 @@ public class TransactionAnalysisApplication {
             );
         };
 
-        static Function<List<String>, List<Transaction>> transformToTransactionList = (List<String> source) -> {
-            LOGGER.info("sources: " + source);
-            Function<List<String>, List<Transaction>> toTransactionList = (List<String> src) -> src.stream()
-                    .map(parseTransactionLine)
+        static final Function<List<String>, List<Transaction>> toTransactionList = (List<String> source) -> source.stream()
+                .map(parseTransactionLine)
+                .toList();
+
+        static final Function<String, List<Transaction>> loadTransactionsFromFile = readTransactionFile
+                .andThen(toTransactionList);
+
+        static final Function<TransactionAnalysisRequest, Function<List<Transaction>, TransactionAnalysisResult>> analyze =
+                (TransactionAnalysisRequest request) -> (List<Transaction> data) -> computeTransactionAnalysis(data, request);
+
+        static TransactionAnalysisResult computeTransactionAnalysis(List<Transaction> data, TransactionAnalysisRequest request) {
+            LOGGER.info("transaction data source: " + data);
+            LOGGER.info("input request: " + request);
+
+            var reversalRelatedIds = data.stream()
+                    .filter(it -> it.type() == TransactionType.REVERSAL)
+                    .map(Transaction::relatedTransactionId)
                     .toList();
-            return source.isEmpty() ? emptyList() : toTransactionList.apply(source);
-        };
+            LOGGER.info("reversalRelatedIds: " + reversalRelatedIds);
 
-        static BiFunction<List<Transaction>, TransactionAnalysisRequest, TransactionAnalysisResult> computeTransactionAnalysisResult =
-                (List<Transaction> data, TransactionAnalysisRequest request) -> {
-                    LOGGER.info("transaction data source: " + data);
-                    LOGGER.info("input request: " + request);
-                    var reversalRelatedIds = data.stream()
-                            .filter(it -> it.type() == TransactionType.REVERSAL)
-                            .map(Transaction::relatedTransactionId)
-                            .toList();
-                    LOGGER.info("reversalRelatedIds: " + reversalRelatedIds);
+            // merchant name matches, satisfies the date range, only the `PAYMENT` type is
+            // counted, and this payment record should not have a related reversal record.
+            var filteredTransactions = data.stream()
+                    .filter(it -> it.merchantName().equals(request.merchantName())
+                            && it.transactedAt().isAfter(request.fromDate())
+                            && it.transactedAt().isBefore(request.toDate())
+                            && it.type() == TransactionType.PAYMENT
+                            && !reversalRelatedIds.contains(it.id()))
+                    .toList();
+            LOGGER.info("filteredTransactions: " + filteredTransactions);
 
-                    Predicate<Transaction> validTransaction = (Transaction it) ->
-                            // merchant name matches
-                            it.merchantName().equals(request.merchantName())
-                                    // satisfies the date range.
-                                    && it.transactedAt().isAfter(request.fromDate())
-                                    && it.transactedAt().isBefore(request.toDate())
-                                    // only the `PAYMENT` type is calculated into the analysis.
-                                    && it.type() == TransactionType.PAYMENT
-                                    // this payment record should not contain a reversal record.
-                                    && !reversalRelatedIds.contains(it.id());
+            if (filteredTransactions.isEmpty()) {
+                return new TransactionAnalysisResult.NotFound();
+            }
 
-                    var filteredTransactions = data.stream()
-                            .filter(validTransaction)
-                            .toList();
-                    LOGGER.info("filteredTransactions: " + filteredTransactions);
-                    if (filteredTransactions.isEmpty()) {
-                        return new TransactionAnalysisResult.NotFound();
-                    } else {
-                        return new TransactionAnalysisResult.Found(filteredTransactions);
-                    }
-                };
+            var count = filteredTransactions.size();
+            var totalAmount = filteredTransactions.stream()
+                    .map(Transaction::amount)
+                    .reduce(BigDecimal.ZERO, BigDecimal::add);
+            var averageAmount = totalAmount.divide(new BigDecimal(count), RoundingMode.HALF_UP);
+            return new TransactionAnalysisResult.Found(count, totalAmount, averageAmount);
+        }
 
-        static Consumer<TransactionAnalysisResult> printTransactionAnalysisResult = System.out::println;
+        static final Consumer<TransactionAnalysisResult> printTransactionAnalysisResult = System.out::println;
     }
 
     public static record TransactionAnalysisRequest(
@@ -148,37 +165,12 @@ public class TransactionAnalysisApplication {
         }
     }
 
-    public sealed static class TransactionAnalysisResult
+    public sealed interface TransactionAnalysisResult
             permits TransactionAnalysisResult.Found, TransactionAnalysisResult.NotFound {
 
-        static final class Found extends TransactionAnalysisResult {
-            private final long count;
-            private final BigDecimal totalAmount;
-            private final BigDecimal averageAmount;
-
-            public Found(List<Transaction> filteredTransactions) {
-                this.count = filteredTransactions.size();
-                this.totalAmount = filteredTransactions.stream()
-                        .map(Transaction::amount)
-                        .reduce(BigDecimal.ZERO, BigDecimal::add);
-                this.averageAmount = totalAmount.divide(new BigDecimal(count), RoundingMode.HALF_UP);
-            }
-
-            public long getCount() {
-                return count;
-            }
-
-            public BigDecimal getTotalAmount() {
-                return totalAmount;
-            }
-
-            public BigDecimal getAverageAmount() {
-                return averageAmount;
-            }
-
+        record Found(long count, BigDecimal totalAmount, BigDecimal averageAmount) implements TransactionAnalysisResult {
             @Override
             public String toString() {
-
                 var templatedString = """
                         Number of transactions = %d
                         Total Transaction Value = %.2f
@@ -188,7 +180,7 @@ public class TransactionAnalysisApplication {
             }
         }
 
-        static final class NotFound extends TransactionAnalysisResult {
+        record NotFound() implements TransactionAnalysisResult {
             @Override
             public String toString() {
                 return "No transactions found.";
