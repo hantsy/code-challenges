@@ -1,4 +1,4 @@
 export enum TransactionType {
-    PAYMENT,
-    REVERSAL
+  PAYMENT,
+  REVERSAL
 }

@@ -117,11 +117,9 @@ describe('TransactionRepository', () => {
     let mockedTransactionLoader: IMock<TransactionLoader>;
     beforeEach(() => {
       mockedTransactionLoader = new Mock<TransactionLoader>()
-        .setup((instance) => instance.load())
+        .setup((mockedLoader) => mockedLoader.load())
         .returns(fakeTransactionData);
     });
-
-    afterEach(() => {});
 
     it('test query by merchant and date range(moq.ts)', () => {
       const repository = new TransactionRepository(
@@ -143,7 +141,7 @@ describe('TransactionRepository', () => {
       );
       expect(transactions.length).toBe(1);
       mockedTransactionLoader.verify(
-        (instance) => instance.load(),
+        (mockedLoader) => mockedLoader.load(),
         Times.Exactly(1)
       );
     });

@@ -24,7 +24,7 @@ export class DefaultTransactionLoader implements TransactionLoader {
       ),
       amount: Big(fields[2].trim()),
       merchantName: fields[3].trim(),
-      type: TransactionType[fields[4].trim()],
+      type: TransactionType[fields[4].trim() as keyof typeof TransactionType],
       relatedTransactionId: fields[5].trim()
     };
   }
