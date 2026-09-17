@@ -1,16 +1,18 @@
 package com.example.demo.application.internal;
 
 import com.example.demo.application.GenerateTransactionStatisticsReportService;
-import com.example.demo.application.QueryValidPaymentTransactionsService;
 import com.example.demo.application.TransactionStatisticsRequest;
 import com.example.demo.application.TransactionStatisticsResponse;
+import com.example.demo.domain.model.Notification;
 import com.example.demo.domain.model.Transaction;
 import com.example.demo.domain.model.TransactionType;
 import com.example.demo.domain.repository.TransactionRepository;
+import com.example.demo.domain.service.NotificationSender;
 import org.junit.jupiter.api.Test;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -22,8 +24,9 @@ class DefaultGenerateTransactionStatisticsReportServiceTest {
     private static final LocalDateTime TO = LocalDateTime.of(2020, 8, 20, 15, 0, 0);
 
     private final FixedTransactionRepository repository = new FixedTransactionRepository();
-    private final QueryValidPaymentTransactionsService queryService = new DefaultQueryValidPaymentTransactionsService(repository, List.of());
-    private final GenerateTransactionStatisticsReportService service = new DefaultGenerateTransactionStatisticsReportService(queryService);
+    private final CollectingNotificationSender notifier = new CollectingNotificationSender();
+    private final GenerateTransactionStatisticsReportService service =
+            new DefaultGenerateTransactionStatisticsReportService(repository, List.of(notifier));
 
     @Test
     void reports_statistics_of_found_transactions() {
@@ -49,6 +52,27 @@ class DefaultGenerateTransactionStatisticsReportServiceTest {
 
         assertThat(response).isInstanceOf(TransactionStatisticsResponse.NotFound.class);
         assertThat(response.toString()).isEqualTo("No transactions found.");
+    }
+
+    @Test
+    void notifies_all_registered_notifiers_after_generating_a_report() {
+        repository.result = List.of(payment("WLMFRDGD", "59.99"));
+
+        service.generateReport(request());
+
+        assertThat(notifier.received).hasSize(1)
+                .first()
+                .extracting(Notification::message)
+                .isEqualTo("generateReport is executed.");
+    }
+
+    @Test
+    void notifies_even_when_no_transaction_is_found() {
+        repository.result = List.of();
+
+        service.generateReport(request());
+
+        assertThat(notifier.received).hasSize(1);
     }
 
     @Test
@@ -82,13 +106,17 @@ class DefaultGenerateTransactionStatisticsReportServiceTest {
         }
 
         @Override
-        public List<Transaction> findByType(TransactionType type) {
-            return List.of();
+        public List<Transaction> findValidPayments(String merchant, LocalDateTime fromDate, LocalDateTime toDate) {
+            return result;
         }
+    }
+
+    static final class CollectingNotificationSender implements NotificationSender {
+        final List<Notification> received = new ArrayList<>();
 
         @Override
-        public List<Transaction> findByMerchantAndDateRangeAndType(String merchant, LocalDateTime fromDate, LocalDateTime toDate, TransactionType type) {
-            return result;
+        public void notify(Notification notification) {
+            received.add(notification);
         }
     }
 }

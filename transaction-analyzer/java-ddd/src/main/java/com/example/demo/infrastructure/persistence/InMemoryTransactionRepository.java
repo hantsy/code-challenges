@@ -6,6 +6,8 @@ import com.example.demo.domain.repository.TransactionRepository;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class InMemoryTransactionRepository implements TransactionRepository {
 
@@ -18,20 +20,20 @@ public class InMemoryTransactionRepository implements TransactionRepository {
     }
 
     @Override
-    public List<Transaction> findByType(TransactionType type) {
-        return this.data.stream()
-                .filter(it -> it.type() == type)
-                .toList();
-    }
+    public List<Transaction> findValidPayments(String merchant, LocalDateTime fromDate, LocalDateTime toDate) {
+        // a reversal without a related id excludes nothing, and toUnmodifiableSet rejects nulls
+        var reversedTransactionIds = this.data.stream()
+                .filter(it -> it.type() == TransactionType.REVERSAL)
+                .map(Transaction::relatedTransactionId)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toUnmodifiableSet());
 
-    @Override
-    public List<Transaction> findByMerchantAndDateRangeAndType(String merchant, LocalDateTime fromDate, LocalDateTime toDate, TransactionType type) {
         return this.data.stream()
-                .filter(it -> it.merchantName().equals(merchant)
-                        && it.transactedAt().isAfter(fromDate)
-                        && it.transactedAt().isBefore(toDate)
-                        && it.type() == type
-                )
+                .filter(it -> it.type() == TransactionType.PAYMENT)
+                .filter(it -> it.merchantName().equals(merchant))
+                .filter(it -> it.transactedAt().isAfter(fromDate))
+                .filter(it -> it.transactedAt().isBefore(toDate))
+                .filter(it -> !reversedTransactionIds.contains(it.id()))
                 .toList();
     }
 }

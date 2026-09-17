@@ -27,25 +27,54 @@ class InMemoryTransactionRepositoryTest {
     }
 
     @Test
-    void finds_transactions_by_type() {
-        assertThat(store.findByType(TransactionType.REVERSAL))
-                .extracting(Transaction::id)
-                .containsExactly("AKNBVHMN");
-    }
-
-    @Test
-    void finds_transactions_by_merchant_date_range_and_type() {
-        var found = store.findByMerchantAndDateRangeAndType(
-                "Kwik-E-Mart", BASE.minusSeconds(1), BASE.plusMinutes(31), TransactionType.PAYMENT);
+    void finds_payments_by_merchant_and_date_range() {
+        var found = store.findValidPayments(
+                "Kwik-E-Mart", BASE.minusSeconds(1), BASE.plusMinutes(31));
 
         assertThat(found).extracting(Transaction::id).containsExactly("WLMFRDGD");
     }
 
     @Test
     void excludes_transactions_on_the_range_boundaries() {
-        var found = store.findByMerchantAndDateRangeAndType(
-                "Kwik-E-Mart", BASE, BASE, TransactionType.PAYMENT);
+        var found = store.findValidPayments("Kwik-E-Mart", BASE, BASE);
 
         assertThat(found).isEmpty();
+    }
+
+    @Test
+    void excludes_payments_that_have_a_related_reversal() {
+        store.save(List.of(
+                payment("WLMFRDGD", "59.99"),
+                payment("YGXKOEIA", "10.95"),
+                reversal("AKNBVHMN", "YGXKOEIA")
+        ));
+
+        var found = store.findValidPayments(
+                "Kwik-E-Mart", BASE.minusHours(1), BASE.plusHours(1));
+
+        assertThat(found).extracting(Transaction::id).containsExactly("WLMFRDGD");
+    }
+
+    @Test
+    void ignores_a_reversal_that_has_no_related_transaction_id() {
+        store.save(List.of(
+                payment("WLMFRDGD", "59.99"),
+                reversal("AKNBVHMN", null)
+        ));
+
+        var found = store.findValidPayments(
+                "Kwik-E-Mart", BASE.minusHours(1), BASE.plusHours(1));
+
+        assertThat(found).extracting(Transaction::id).containsExactly("WLMFRDGD");
+    }
+
+    private static Transaction payment(String id, String amount) {
+        return new Transaction(id, BASE, new BigDecimal(amount),
+                "Kwik-E-Mart", TransactionType.PAYMENT, null);
+    }
+
+    private static Transaction reversal(String id, String relatedTransactionId) {
+        return new Transaction(id, BASE.plusMinutes(30), new BigDecimal("10.95"),
+                "Kwik-E-Mart", TransactionType.REVERSAL, relatedTransactionId);
     }
 }

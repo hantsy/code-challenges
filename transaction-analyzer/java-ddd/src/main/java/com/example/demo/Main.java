@@ -2,7 +2,6 @@ package com.example.demo;
 
 import com.example.demo.application.internal.DefaultGenerateTransactionStatisticsReportService;
 import com.example.demo.application.internal.DefaultLoadTransactionsService;
-import com.example.demo.application.internal.DefaultQueryValidPaymentTransactionsService;
 import com.example.demo.infrastructure.csv.CsvTransactionLoader;
 import com.example.demo.infrastructure.notification.EmailNotificationSender;
 import com.example.demo.infrastructure.notification.SlackNotificationSender;
@@ -30,8 +29,7 @@ public class Main {
         var loadService = new DefaultLoadTransactionsService(loader, store);
         loadService.loadAndPersist();
 
-        var queryService = new DefaultQueryValidPaymentTransactionsService(store, notifiers);
-        var reportService = new DefaultGenerateTransactionStatisticsReportService(queryService);
+        var reportService = new DefaultGenerateTransactionStatisticsReportService(store, notifiers);
 
         // interfaces
         var console = new TransactionReportConsole(reportService);

@@ -52,12 +52,7 @@ class DefaultLoadTransactionsServiceTest {
         }
 
         @Override
-        public List<Transaction> findByType(TransactionType type) {
-            return List.of();
-        }
-
-        @Override
-        public List<Transaction> findByMerchantAndDateRangeAndType(String merchant, LocalDateTime fromDate, LocalDateTime toDate, TransactionType type) {
+        public List<Transaction> findValidPayments(String merchant, LocalDateTime fromDate, LocalDateTime toDate) {
             return List.of();
         }
     }

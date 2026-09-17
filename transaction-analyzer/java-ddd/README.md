@@ -9,16 +9,14 @@ package architecture.
 com.example.demo
 ├── application
 │   ├── LoadTransactionsService                # interface, command service
-│   ├── QueryValidPaymentTransactionsService   # interface, query service
-│   ├── GenerateTransactionStatisticsReportService
+│   ├── GenerateTransactionStatisticsReportService # interface, query service
 │   ├── TransactionStatisticsRequest/Response  # query DTOs
 │   └── internal                               # service implementations
 │       ├── DefaultLoadTransactionsService
-│       ├── DefaultQueryValidPaymentTransactionsService
-│       └── DefaultGenerateTransactionStatisticsReportService
+│       └── DefaultGenerateTransactionStatisticsReportService # query + statistics + notification
 ├── domain
 │   ├── model                    # Transaction, TransactionType, Notification (pure)
-│   ├── repository               # TransactionRepository interface
+│   ├── repository               # TransactionRepository interface (findValidPayments)
 │   └── service                  # domain service interfaces
 │       ├── TransactionLoader    # source of transactions
 │       └── NotificationSender   # outbound notification
@@ -38,6 +36,12 @@ on interfaces or application service implementations (`application.internal`).
 Application services expose interfaces in `application`; their implementations
 reside in `application.internal`, and domain service interfaces (`TransactionLoader`,
 `NotificationSender`) are declared in `domain.service`.
+
+Excluding reversed payments is part of the query itself, so it is expressed as a
+single domain-intent method, `TransactionRepository#findValidPayments`, and implemented
+by each repository. `DefaultGenerateTransactionStatisticsReportService` owns the
+remaining application flow: run the query, notify all `NotificationSender`s, then
+reduce the result into `TransactionStatisticsResponse`.
 
 ## Prerequisite
 
