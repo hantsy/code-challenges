@@ -109,7 +109,7 @@ describe('TransactionRepository', () => {
         )
       );
       expect(transactions.length).toBe(1);
-      expect(loader.load).toBeCalledTimes(1);
+      expect(loader.load).toHaveBeenCalledTimes(1);
     });
   });
 
