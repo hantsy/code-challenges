@@ -10,6 +10,8 @@ describe('TransactionType', () => {
   });
 
   it("should parse 'UNKNOWN' as undefined ", () => {
-    expect(TransactionType.UNKNOWN).toBeUndefined();
+    expect(
+      TransactionType['UNKNOWN' as keyof typeof TransactionType]
+    ).toBeUndefined();
   });
 });

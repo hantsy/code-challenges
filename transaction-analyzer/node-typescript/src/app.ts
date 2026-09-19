@@ -1,18 +1,14 @@
 import Big from 'big.js';
 import { DateTimeFormatter, LocalDateTime } from '@js-joda/core';
+import readlineSync from 'readline-sync';
 import { DefaultTransactionLoader } from './file-transaction-loader';
 import { TransactionRepository } from './transaction-repository';
 
 export class App {
   public static run(): void {
-    const readlineSync = require('readline-sync');
-    const fromDate = readlineSync.question(
-      'fromDate (dd/MM/yyyy HH:mm:ss):'
-    ) as string;
-    const toDate = readlineSync.question(
-      'toDate (dd/MM/yyyy HH:mm:ss):'
-    ) as string;
-    const merchantName = readlineSync.question('merchant:') as string;
+    const fromDate = readlineSync.question('fromDate (dd/MM/yyyy HH:mm:ss):');
+    const toDate = readlineSync.question('toDate (dd/MM/yyyy HH:mm:ss):');
+    const merchantName = readlineSync.question('merchant:');
 
     const filtered = new TransactionRepository(
       new DefaultTransactionLoader('./input.csv')
@@ -29,7 +25,7 @@ export class App {
     );
     console.log('filtered transactions:' + JSON.stringify(filtered));
 
-    if (filtered.length == 0) {
+    if (filtered.length === 0) {
       console.log('No transactions found.');
     } else {
       const sum = filtered.reduce((a, c) => a.plus(c.amount), Big(0));
