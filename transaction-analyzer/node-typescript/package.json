@@ -36,7 +36,7 @@
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "@js-joda/core": "^5.6.5",
+    "@js-joda/core": "^6.1.0",
     "big.js": "^7.0.1",
     "readline-sync": "^1.4.10",
     "tslib": "^2.8.1"
